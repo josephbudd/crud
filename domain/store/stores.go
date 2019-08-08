@@ -2,9 +2,9 @@ package store
 
 import (
 	"strings"
-	
-	"github.com/pkg/errors"
+
 	"github.com/josephbudd/crud/domain/store/storer"
+	"github.com/pkg/errors"
 )
 
 /*

@@ -14,9 +14,9 @@ import (
 
 // panelPresenter writes to the panel
 type panelPresenter struct {
-	group     *panelGroup
-	controler *panelControler
-	caller    *panelCaller
+	group      *panelGroup
+	controller *panelController
+	caller     *panelCaller
 
 	/* NOTE TO DEVELOPER: Step 1 of 3.
 

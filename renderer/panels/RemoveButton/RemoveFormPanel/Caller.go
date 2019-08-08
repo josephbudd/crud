@@ -10,9 +10,9 @@ import "github.com/josephbudd/crud/domain/lpc/message"
 
 // panelCaller communicates with the main process via an asynchrounous connection.
 type panelCaller struct {
-	group     *panelGroup
-	presenter *panelPresenter
-	controler *panelControler
+	group      *panelGroup
+	presenter  *panelPresenter
+	controller *panelController
 
 	/* NOTE TO DEVELOPER. Step 1 of 4.
 
@@ -35,7 +35,7 @@ func (caller *panelCaller) getContactRX(msg *message.GetRemoveContactMainProcess
 	if msg.Error {
 		return
 	}
-	caller.controler.handleGetContact(msg.Record)
+	caller.controller.handleGetContact(msg.Record)
 }
 
 // RemoveContact
@@ -95,6 +95,17 @@ func (caller *panelCaller) initialCalls() {
 	/* NOTE TO DEVELOPER. Step 4 of 4.
 
 	//4.1: Make any initial calls to the main process that must be made when the app starts.
+
+	// example:
+
+	// import "github.com/josephbudd/crud/domain/data/loglevels"
+	// import "github.com/josephbudd/crud/domain/lpc/message"
+
+	msg := &message.LogRendererToMainProcess{
+		Level:   loglevels.LogLevelInfo,
+		Message: "Started",
+	}
+	sendCh <- msg
 
 	*/
 }

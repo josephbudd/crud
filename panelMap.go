@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/josephbudd/crudsitepack"
 	"github.com/josephbudd/crud/domain/data/filepaths"
+	"github.com/josephbudd/crudsitepack"
 )
 
 /*

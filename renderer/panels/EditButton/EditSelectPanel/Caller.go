@@ -10,9 +10,9 @@ import "github.com/josephbudd/crud/domain/lpc/message"
 
 // panelCaller communicates with the main process via an asynchrounous connection.
 type panelCaller struct {
-	group     *panelGroup
-	presenter *panelPresenter
-	controler *panelControler
+	group      *panelGroup
+	presenter  *panelPresenter
+	controller *panelController
 
 	/* NOTE TO DEVELOPER. Step 1 of 4.
 
@@ -46,8 +46,8 @@ func (caller *panelCaller) getEditSelectContactsPageRX(msg *message.GetEditSelec
 		tools.Error(msg.ErrorMessage)
 		return
 	}
-	// No errors so pass the info to the controler.
-	caller.controler.buildButtons(msg.Records, msg.FirstRecordIndex, msg.TotalRecordCount, msg.State)
+	// No errors so pass the info to the controller.
+	caller.controller.buildButtons(msg.Records, msg.FirstRecordIndex, msg.TotalRecordCount, msg.State)
 }
 
 // GetContact
@@ -74,7 +74,7 @@ func (caller *panelCaller) getContactRX(msg *message.GetEditContactMainProcessTo
 
 func (caller *panelCaller) reloadContactsRX(msg *message.ReloadContactsMainProcessToRenderer) {
 	// Tell the vlist to restart.
-	caller.controler.vlist.Start()
+	caller.controller.vlist.Start()
 }
 
 // listen listens for messages from the main process.
@@ -120,6 +120,17 @@ func (caller *panelCaller) initialCalls() {
 	/* NOTE TO DEVELOPER. Step 4 of 4.
 
 	//4.1: Make any initial calls to the main process that must be made when the app starts.
+
+	// example:
+
+	// import "github.com/josephbudd/crud/domain/data/loglevels"
+	// import "github.com/josephbudd/crud/domain/lpc/message"
+
+	msg := &message.LogRendererToMainProcess{
+		Level:   loglevels.LogLevelInfo,
+		Message: "Started",
+	}
+	sendCh <- msg
 
 	*/
 }

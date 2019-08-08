@@ -13,9 +13,9 @@ import (
 
 // panelCaller communicates with the main process via an asynchrounous connection.
 type panelCaller struct {
-	group     *panelGroup
-	presenter *panelPresenter
-	controler *panelControler
+	group      *panelGroup
+	presenter  *panelPresenter
+	controller *panelController
 
 	/* NOTE TO DEVELOPER. Step 1 of 4.
 
@@ -39,7 +39,7 @@ func (caller *panelCaller) getContactRX(msg *message.GetEditContactMainProcessTo
 		return
 	}
 	// no errors
-	caller.controler.handleGetContact(msg.Record)
+	caller.controller.handleGetContact(msg.Record)
 }
 
 // Edit Contact.

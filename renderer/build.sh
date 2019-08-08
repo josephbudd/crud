@@ -80,8 +80,8 @@ echo ""
 echo "STEP ${step}:"
 echo "WRITE THE ${sitepack_package_name} PACKAGE SOURCE CODE."
 echo " * The ${sitepack_package_name} package will pretend to be a file store"
-echo "     but it will actually just read the files in your site folder"
-echo "     and return their contents."
+echo "     but it will actually just read the files"
+echo "     in the site folder and return their contents."
 echo " * See func serveFileStore in Serve.go."
 echo "cd ${appwd}"
 cd ..
@@ -111,7 +111,7 @@ then
 fi
 
 echo " * Success."
-echo " * You have sucessfully compiled the ${sitepack_package_name} package object code."
+echo " * You have successfully compiled the ${sitepack_package_name} package object code."
 
 echo ""
 (( step += 1 ))

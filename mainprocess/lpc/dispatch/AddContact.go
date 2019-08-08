@@ -43,7 +43,6 @@ func handleAddContact(rxmessage *message.AddContactRendererToMainProcess, sendin
 	}
 	// The storer updated the record id if it needed updated.
 	// Send the record back with no error.
-	log.Printf("%#v", txmessage)
 	sending <- txmessage
 	// Also send the message that the contacts store has been modified.
 	sending <- &message.ReloadContactsMainProcessToRenderer{}

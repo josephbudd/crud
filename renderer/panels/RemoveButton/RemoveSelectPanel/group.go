@@ -17,7 +17,6 @@ import (
 // panelGroup is a group of 3 panels.
 // It also has show panel funcs for each panel in this panel group.
 type panelGroup struct {
-
 	removeNotReadyPanel js.Value
 	removeSelectPanel js.Value
 	removeFormPanel js.Value
@@ -50,7 +49,7 @@ func (group *panelGroup) defineMembers() (err error) {
 /*
 	Show panel funcs.
 
-	Call these from the controler, presenter and caller.
+	Call these from the controller, presenter and caller.
 */
 
 // showRemoveNotReadyPanel shows the panel you named RemoveNotReadyPanel while hiding any other panels in this panel group.

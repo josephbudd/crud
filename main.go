@@ -7,7 +7,6 @@ import (
 
 	"github.com/josephbudd/crud/domain/data/settings"
 	"github.com/josephbudd/crud/domain/store"
-	"github.com/josephbudd/crud/domain/types"
 	"github.com/josephbudd/crud/mainprocess/lpc"
 	"github.com/josephbudd/crud/mainprocess/lpc/dispatch"
 )
@@ -40,7 +39,7 @@ func main() {
 	defer stores.Close()
 
 	// get the application's host and port and then setup the listener.
-	var appSettings *types.ApplicationSettings
+	var appSettings *settings.ApplicationSettings
 	if appSettings, err = settings.NewApplicationSettings(); err != nil {
 		log.Println(err)
 		return

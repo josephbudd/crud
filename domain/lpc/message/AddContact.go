@@ -11,5 +11,6 @@ type AddContactRendererToMainProcess struct {
 type AddContactMainProcessToRenderer struct {
 	Error        bool
 	ErrorMessage string
-	Record       *record.Contact
+
+	Record *record.Contact
 }

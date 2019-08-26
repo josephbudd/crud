@@ -1,16 +1,18 @@
 package main
 
 import (
+	"github.com/pkg/errors"
+
 	"github.com/josephbudd/crud/renderer/lpc"
 	"github.com/josephbudd/crud/renderer/notjs"
 	"github.com/josephbudd/crud/renderer/paneling"
-	"github.com/josephbudd/crud/renderer/panels/AddButton/AddPanel"
-	"github.com/josephbudd/crud/renderer/panels/EditButton/EditFormPanel"
-	"github.com/josephbudd/crud/renderer/panels/EditButton/EditNotReadyPanel"
-	"github.com/josephbudd/crud/renderer/panels/EditButton/EditSelectPanel"
-	"github.com/josephbudd/crud/renderer/panels/RemoveButton/RemoveFormPanel"
-	"github.com/josephbudd/crud/renderer/panels/RemoveButton/RemoveNotReadyPanel"
-	"github.com/josephbudd/crud/renderer/panels/RemoveButton/RemoveSelectPanel"
+	addpanel "github.com/josephbudd/crud/renderer/panels/AddButton/AddPanel"
+	editformpanel "github.com/josephbudd/crud/renderer/panels/EditButton/EditFormPanel"
+	editnotreadypanel "github.com/josephbudd/crud/renderer/panels/EditButton/EditNotReadyPanel"
+	editselectpanel "github.com/josephbudd/crud/renderer/panels/EditButton/EditSelectPanel"
+	removeformpanel "github.com/josephbudd/crud/renderer/panels/RemoveButton/RemoveFormPanel"
+	removenotreadypanel "github.com/josephbudd/crud/renderer/panels/RemoveButton/RemoveNotReadyPanel"
+	removeselectpanel "github.com/josephbudd/crud/renderer/panels/RemoveButton/RemoveSelectPanel"
 	"github.com/josephbudd/crud/renderer/viewtools"
 )
 
@@ -24,48 +26,45 @@ import (
 
 func doPanels(client *lpc.Client, quitChan, eojChan chan struct{}, receiveChan lpc.Receiving, sendChan lpc.Sending,
 	tools *viewtools.Tools, notJS *notjs.NotJS, help *paneling.Help) (err error) {
+	
+	defer func() {
+		if err != nil {
+			err = errors.WithMessage(err, "doPanels")
+			tools.ConsoleLog("Error: " + err.Error())
+		}
+	}()
 
 	// 1. Prepare the spawn panels.
 
 	// 2. Construct the panel code.
 	var addPanel *addpanel.Panel
 	if addPanel, err = addpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, tools, notJS, help); err != nil {
-		tools.ConsoleLog("doPanels: erorr is " + err.Error())
 		return
 	}
 	var editFormPanel *editformpanel.Panel
 	if editFormPanel, err = editformpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, tools, notJS, help); err != nil {
-		tools.ConsoleLog("doPanels: erorr is " + err.Error())
 		return
 	}
 	var editNotReadyPanel *editnotreadypanel.Panel
 	if editNotReadyPanel, err = editnotreadypanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, tools, notJS, help); err != nil {
-		tools.ConsoleLog("doPanels: erorr is " + err.Error())
 		return
 	}
 	var editSelectPanel *editselectpanel.Panel
 	if editSelectPanel, err = editselectpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, tools, notJS, help); err != nil {
-		tools.ConsoleLog("doPanels: erorr is " + err.Error())
 		return
 	}
 	var removeFormPanel *removeformpanel.Panel
 	if removeFormPanel, err = removeformpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, tools, notJS, help); err != nil {
-		tools.ConsoleLog("doPanels: erorr is " + err.Error())
 		return
 	}
 	var removeNotReadyPanel *removenotreadypanel.Panel
 	if removeNotReadyPanel, err = removenotreadypanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, tools, notJS, help); err != nil {
-		tools.ConsoleLog("doPanels: erorr is " + err.Error())
 		return
 	}
 	var removeSelectPanel *removeselectpanel.Panel
 	if removeSelectPanel, err = removeselectpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, tools, notJS, help); err != nil {
-		tools.ConsoleLog("doPanels: erorr is " + err.Error())
 		return
 	}
-
-	// No errors so continue.
-	tools.ConsoleLog("doPanels: no erorrs")
 
 	// 3. Size the app.
 	tools.SizeApp()

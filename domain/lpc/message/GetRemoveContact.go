@@ -11,6 +11,7 @@ type GetRemoveContactRendererToMainProcess struct {
 type GetRemoveContactMainProcessToRenderer struct {
 	Error        bool
 	ErrorMessage string
-	Record       *record.Contact
-	ID           uint64
+
+	Record *record.Contact
+	ID     uint64
 }

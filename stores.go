@@ -3,7 +3,6 @@ package main
 import (
 	"path/filepath"
 
-	"github.com/boltdb/bolt"
 	"github.com/pkg/errors"
 
 	"github.com/josephbudd/crud/domain/data/filepaths"
@@ -20,9 +19,10 @@ import (
 
 */
 
-// buildStores makes bolt data stores.
-// It also opens the bolt database.
-// The stores can be close with stores.Close()
+// buildStores makes and opens the data stores.
+// It makes each bolt data stores and opens the bolt database.
+// It makes each remote data database store and opens it.
+// All of the stores can be close with stores.Close()
 func buildStores() (stores *store.Stores, err error) {
 
 	defer func() {
@@ -37,13 +37,9 @@ func buildStores() (stores *store.Stores, err error) {
 		return
 	}
 	path = filepath.Join(path, "stores.nosql")
-	var db *bolt.DB
-	if db, err = bolt.Open(path, filepaths.GetFmode(), nil); err != nil {
-		err = errors.WithMessage(err, "bolt.Open(path, filepaths.GetFmode(), nil)")
-		return
-	}
 	stores = &store.Stores{
-		Contact: storing.NewContactBoltDB(db, path, filepaths.GetFmode()),
+		// Local bolt stores.
+		Contact: storing.NewContactLocalBoltStore(path, filepaths.GetFmode()),
 	}
 	return
 }

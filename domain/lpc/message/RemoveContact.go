@@ -9,5 +9,6 @@ type RemoveContactRendererToMainProcess struct {
 type RemoveContactMainProcessToRenderer struct {
 	Error        bool
 	ErrorMessage string
-	ID           uint64
+
+	ID uint64
 }

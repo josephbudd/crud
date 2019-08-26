@@ -4,11 +4,11 @@ package record
 
 	TODO:
 
-	You need to complete this record definition.
+	You need to complete this local bolt store record definition.
 
 */
 
-// Contact is a Contact record.
+// Contact is the local bolt store Contact record.
 type Contact struct {
 	ID       uint64
 	Name     string
@@ -22,7 +22,7 @@ type Contact struct {
 	Social   string
 }
 
-// NewContact constructs a new Contact record.
+// NewContact constructs a new local bolt store Contact.
 func NewContact() *Contact {
 	v := &Contact{}
 	return v

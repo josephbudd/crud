@@ -1,7 +1,7 @@
 
 ABOUT THE FILES IN THE FOLDER mainprocess/lpc/dispatch/.
 
-  * dispatch.go contains func Do which dispatches the LPC ( Local Procedure Call ) messages received from the renderer to the main process.
+  * dispatch.go contains func Do which dispatches the LPC ( Local Process Communications ) messages received from the renderer.
     Do not edit the file dispatch.go.
     In func Do, the messages are dispatched to the LPC message handlers here in this folder.
 

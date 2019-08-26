@@ -28,7 +28,6 @@ import (
 //     1. Get a channel to listen to with eojing.NewEOJ().
 //     2. Before your go routine returns, release that channel with eojing.Release().
 func handleAddContact(rxmessage *message.AddContactRendererToMainProcess, sending lpc.Sending, eojing lpc.EOJer, stores *store.Stores) {
-	log.Println("handleAddContact")
 	txmessage := &message.AddContactMainProcessToRenderer{
 		Record: rxmessage.Record,
 	}

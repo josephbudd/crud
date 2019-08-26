@@ -1,8 +1,6 @@
 package message
 
-import (
-	"github.com/josephbudd/crud/domain/store/record"
-)
+import "github.com/josephbudd/crud/domain/store/record"
 
 // GetEditContactRendererToMainProcess is the GetEditContact message that the renderer sends to the main process.
 type GetEditContactRendererToMainProcess struct {
@@ -13,6 +11,7 @@ type GetEditContactRendererToMainProcess struct {
 type GetEditContactMainProcessToRenderer struct {
 	Error        bool
 	ErrorMessage string
-	Record       *record.Contact
-	ID           uint64
+
+	Record *record.Contact
+	ID     uint64
 }

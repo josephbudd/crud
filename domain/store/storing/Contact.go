@@ -6,30 +6,26 @@ import (
 	"os"
 
 	"github.com/boltdb/bolt"
+	"github.com/pkg/errors"
+
 	"github.com/josephbudd/crud/domain/store/record"
 )
 
-/*
-	type ContactBoltDB
-	is the implementation of the /domain/store/storer.ContactStorer interface
-	  for the bolt database.
-*/
-
 const contactBucketName string = "contact"
 
-// ContactBoltDB is the bolt db for key codes.
-type ContactBoltDB struct {
+// ContactLocalBoltStore is the API of the Contact local bolt store.
+// It is the implementation of the interface in /domain/store/storerContact.go.
+type ContactLocalBoltStore struct {
 	DB    *bolt.DB
 	path  string
 	perms os.FileMode
 }
 
-// NewContactBoltDB constructs a new ContactBoltDB.
+// NewContactLocalBoltStore constructs a new ContactLocalBoltStore.
 // Param db is an open bolt data-store.
-// Returns a pointer to the new ContactBoltDB.
-func NewContactBoltDB(db *bolt.DB, path string, perms os.FileMode) (store *ContactBoltDB) {
-	store = &ContactBoltDB{
-		DB:    db,
+// Returns a pointer to the new ContactLocalBoltStore.
+func NewContactLocalBoltStore(path string, perms os.FileMode) (store *ContactLocalBoltStore) {
+	store = &ContactLocalBoltStore{
 		path:  path,
 		perms: perms,
 	}
@@ -38,14 +34,30 @@ func NewContactBoltDB(db *bolt.DB, path string, perms os.FileMode) (store *Conta
 
 // Open opens the bolt data-store.
 // Returns the error.
-func (store *ContactBoltDB) Open() (err error) {
-	// the bolt db is already open
+func (store *ContactLocalBoltStore) Open() (err error) {
+
+	defer func() {
+		if err != nil {
+			err = errors.WithMessage(err, "ContactLocalBoltStore.Open")
+		}
+	}()
+
+	if store.DB, err = bolt.Open(store.path, store.perms, nil); err != nil {
+		err = errors.WithMessage(err, "bolt.Open(path, filepaths.GetFmode(), nil)")
+	}
 	return
 }
 
 // Close closes the bolt data-store.
 // Returns the error.
-func (store *ContactBoltDB) Close() (err error) {
+func (store *ContactLocalBoltStore) Close() (err error) {
+
+	defer func() {
+		if err != nil {
+			err = errors.WithMessage(err, "ContactLocalBoltStore.Close")
+		}
+	}()
+
 	err = store.DB.Close()
 	return
 }
@@ -54,7 +66,7 @@ func (store *ContactBoltDB) Close() (err error) {
 // Param id is the record id.
 // Returns the record and error.
 // If no record is found returns a nil record and a nil error.
-func (store *ContactBoltDB) Get(id uint64) (r *record.Contact, err error) {
+func (store *ContactLocalBoltStore) Get(id uint64) (r *record.Contact, err error) {
 	ids := fmt.Sprintf("%d", id)
 	err = store.DB.View(func(tx *bolt.Tx) (er error) {
 		bucketname := []byte(contactBucketName)
@@ -78,10 +90,10 @@ func (store *ContactBoltDB) Get(id uint64) (r *record.Contact, err error) {
 }
 
 // GetAll retrieves all of the record.Contact from the bolt data-store.
-// If no record is found then it calls store.initialize() and tries again. See *ContactBoltDB.initialize().
+// If no record is found then it calls store.initialize() and tries again. See *ContactLocalBoltStore.initialize().
 // Returns the records and error.
 // If no record is found returns a zero length records and a nil error.
-func (store *ContactBoltDB) GetAll() (rr []*record.Contact, err error) {
+func (store *ContactLocalBoltStore) GetAll() (rr []*record.Contact, err error) {
 	if rr, err = store.getAll(); len(rr) == 0 && err == nil {
 		store.initialize()
 		rr, err = store.getAll()
@@ -89,7 +101,7 @@ func (store *ContactBoltDB) GetAll() (rr []*record.Contact, err error) {
 	return
 }
 
-func (store *ContactBoltDB) getAll() (rr []*record.Contact, err error) {
+func (store *ContactLocalBoltStore) getAll() (rr []*record.Contact, err error) {
 	err = store.DB.View(func(tx *bolt.Tx) (er error) {
 		bucketname := []byte(contactBucketName)
 		var bucket *bolt.Bucket
@@ -115,7 +127,7 @@ func (store *ContactBoltDB) getAll() (rr []*record.Contact, err error) {
 // Param r is the record to be updated.
 // If r is a new record then r.ID is updated with the new record id.
 // Returns the error.
-func (store *ContactBoltDB) Update(r *record.Contact) (err error) {
+func (store *ContactLocalBoltStore) Update(r *record.Contact) (err error) {
 	err = store.update(r)
 	return
 }
@@ -124,7 +136,7 @@ func (store *ContactBoltDB) Update(r *record.Contact) (err error) {
 // Param id the key of the record to be removed.
 // If the record is not found returns a nil error.
 // Returns the error.
-func (store *ContactBoltDB) Remove(id uint64) (err error) {
+func (store *ContactLocalBoltStore) Remove(id uint64) (err error) {
 	err = store.DB.Update(func(tx *bolt.Tx) (er error) {
 		bucketname := []byte(contactBucketName)
 		var bucket *bolt.Bucket
@@ -142,7 +154,7 @@ func (store *ContactBoltDB) Remove(id uint64) (err error) {
 // Param record the record to be updated.
 // If the record is new then it's ID is updated.
 // Returns the error.
-func (store *ContactBoltDB) update(r *record.Contact) (err error) {
+func (store *ContactLocalBoltStore) update(r *record.Contact) (err error) {
 	err = store.DB.Update(func(tx *bolt.Tx) (er error) {
 		bucketname := []byte(contactBucketName)
 		var bucket *bolt.Bucket
@@ -167,7 +179,7 @@ func (store *ContactBoltDB) update(r *record.Contact) (err error) {
 
 // initialize is only useful if you want to add the default records to the bolt data-store.
 // otherwise you don't need it to do anything.
-func (store *ContactBoltDB) initialize() (err error) {
+func (store *ContactLocalBoltStore) initialize() (err error) {
 	/*
 		example code:
 

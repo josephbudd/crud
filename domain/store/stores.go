@@ -3,7 +3,7 @@ package store
 import (
 	"strings"
 
-	"github.com/josephbudd/crud/domain/store/storer"
+	"github.com/josephbudd/crud/domain/store/storing"
 	"github.com/pkg/errors"
 )
 
@@ -22,9 +22,30 @@ import (
 */
 
 // Stores is each of the application's storers.
-// Each storer is defined here as an interface.
 type Stores struct {
-	Contact storer.ContactStorer
+	// Local bolt stores.
+	Contact *storing.ContactLocalBoltStore
+}
+
+// Open opens every store.
+// It returns all of the errors as one single error.
+func (stores *Stores) Open() (err error) {
+
+	errList := make([]string, 0, 1)
+	defer func() {
+		if len(errList) > 0 {
+			msg := strings.Join(errList, "\n")
+			err = errors.New(msg)
+		}
+	}()
+
+	// Local bolt stores.
+	if err = stores.Contact.Open(); err != nil {
+		errList = append(errList, err.Error())
+	} else {
+	}
+
+	return
 }
 
 // Close closes every store.
@@ -42,5 +63,6 @@ func (stores *Stores) Close() (err error) {
 	if err = stores.Contact.Close(); err != nil {
 		errList = append(errList, err.Error())
 	}
+
 	return
 }

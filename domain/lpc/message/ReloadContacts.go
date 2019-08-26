@@ -6,4 +6,6 @@ type ReloadContactsRendererToMainProcess struct {
 
 // ReloadContactsMainProcessToRenderer is the ReloadContacts message that the main process sends to the renderer.
 type ReloadContactsMainProcessToRenderer struct {
+	Error        bool
+	ErrorMessage string
 }

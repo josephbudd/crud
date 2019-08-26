@@ -17,7 +17,9 @@ import (
 
 */
 
-// Do dispatches local procedure calls from the renderer to the main process handlers here in package dispatch.
+// Do dispatches local process communications messages received from the renderer.
+// They are dispatched to the main process handlers here in package dispatch.
+// You are required to code the functionality into those handlers.
 func Do(cargo interface{}, sending lpc.Sending, eojing lpc.EOJer, stores *store.Stores) {
 	switch cargo := cargo.(type) {
 	case *message.LogRendererToMainProcess:

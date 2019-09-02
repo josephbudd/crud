@@ -20,9 +20,10 @@ import (
 */
 
 // buildStores makes and opens the data stores.
-// It makes each bolt data stores and opens the bolt database.
-// It makes each remote data database store and opens it.
-// All of the stores can be close with stores.Close()
+// It makes each local bolt data store API.
+// It makes each remote service API.
+// All of the stores and APIs can be opened with stores.Open()
+// All of the stores and APIs can be close with stores.Close()
 func buildStores() (stores *store.Stores, err error) {
 
 	defer func() {

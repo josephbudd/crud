@@ -29,7 +29,7 @@ import (
 
 func main() {
 	var err error
-	// Build the application's store APIs.
+	// Build the application's data store APIs.
 	var stores *store.Stores
 	if stores, err = buildStores(); err != nil {
 		log.Println(err)

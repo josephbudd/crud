@@ -117,6 +117,12 @@ type Tools struct {
 	// user content
 
 	panelNameHVScroll map[string]bool
+
+	// markup panels
+
+	countMarkupPanels        int
+	countSpawnedMarkupPanels int
+	countWidgetsWaiting      int
 }
 
 // NewTools constructs a new Tools
@@ -135,6 +141,8 @@ func NewTools(notJS *notjs.NotJS) *Tools {
 		jsCallBacks:     make(map[uint64][]js.Func, 100),
 
 		panelNameHVScroll: map[string]bool{"AddPanel":false, "EditFormPanel":false, "EditNotReadyPanel":false, "EditSelectPanel":false, "RemoveFormPanel":false, "RemoveNotReadyPanel":false, "RemoveSelectPanel":false},
+
+		countMarkupPanels: 7,
 	}
 	bodies := notJS.GetElementsByTagName("body")
 	v.body = bodies[0]

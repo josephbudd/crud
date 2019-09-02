@@ -24,7 +24,7 @@ import (
 
 */
 
-func doPanels(client *lpc.Client, quitChan, eojChan chan struct{}, receiveChan lpc.Receiving, sendChan lpc.Sending,
+func doPanels(quitChan, eojChan chan struct{}, receiveChan lpc.Receiving, sendChan lpc.Sending,
 	tools *viewtools.Tools, notJS *notjs.NotJS, help *paneling.Help) (err error) {
 	
 	defer func() {
@@ -69,14 +69,14 @@ func doPanels(client *lpc.Client, quitChan, eojChan chan struct{}, receiveChan l
 	// 3. Size the app.
 	tools.SizeApp()
 
-	// 4. Start each panel's listening for the main process.
-	addPanel.Listen()
-	editFormPanel.Listen()
-	editNotReadyPanel.Listen()
-	editSelectPanel.Listen()
-	removeFormPanel.Listen()
-	removeNotReadyPanel.Listen()
-	removeSelectPanel.Listen()
+	// 4. Start each panel's message and event dispatchers.
+	addPanel.StartDispatchers()
+	editFormPanel.StartDispatchers()
+	editNotReadyPanel.StartDispatchers()
+	editSelectPanel.StartDispatchers()
+	removeFormPanel.StartDispatchers()
+	removeNotReadyPanel.StartDispatchers()
+	removeSelectPanel.StartDispatchers()
 
 	// 5. Start each panel's initial calls.
 	addPanel.InitialCalls()

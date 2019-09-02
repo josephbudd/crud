@@ -18,6 +18,10 @@ type panelCaller struct {
 
 	// 1.1: Declare your panelCaller members.
 
+	// example:
+
+	state uint64
+
 	*/
 }
 
@@ -77,9 +81,9 @@ func (caller *panelCaller) reloadContactsRX(msg *message.ReloadContactsMainProce
 	caller.controller.vlist.Start()
 }
 
-// listen listens for messages from the main process.
+// dispatchMessages dispatches LPC messages from the main process.
 // It stops when it receives on the eoj channel.
-func (caller *panelCaller) listen() {
+func (caller *panelCaller) dispatchMessages() {
 	go func() {
 		for {
 			select {
@@ -91,7 +95,7 @@ func (caller *panelCaller) listen() {
 
 				/* NOTE TO DEVELOPER. Step 3 of 4.
 
-				// 3.1:   Remove the default statement below.
+				// 3.1:   Remove the default clause below.
 				// 3.2.a: Add a case for each of the messages
 				//          that you are expecting from the main process.
 				// 3.2.b: In that case statement, pass the message to your message receiver func.
@@ -100,10 +104,8 @@ func (caller *panelCaller) listen() {
 
 				case *message.GetEditSelectContactsPageMainProcessToRenderer:
 					caller.getEditSelectContactsPageRX(msg)
-
 				case *message.GetEditContactMainProcessToRenderer:
 					caller.getContactRX(msg)
-
 				case *message.ReloadContactsMainProcessToRenderer:
 					caller.reloadContactsRX(msg)
 				}

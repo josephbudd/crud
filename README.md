@@ -1,6 +1,10 @@
-This CRUD was originally built to test kickwasm version 5.0.0 and it's tools. Read the CRUD wiki to learn how kickwasm and it's tools are used. The video is the CRUD running is below.
+This CRUD was originally built to test kickwasm version 5.0.0 and it's tools.
 
-This current version was built to test kickwasm version 8.0.0 and it's tools. 
+This current version was built to test kickwasm version 8.0.0 and it's tools.
+
+I need to update the CRUD WIKI so that it reflects kickwasm version 8.0.0. Version 8.0.0 resulted in major changes to the framework's source code.
+
+Read the CRUD wiki to learn how kickwasm and it's tools are used. The video is the CRUD running is below.
 
 Below is an older video of the crud app with the cookie crumbs in the GUI. They only added complexity to a simple application so they are removed in the source code. I'll update the video when I get a chance.
 

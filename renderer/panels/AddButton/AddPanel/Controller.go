@@ -189,10 +189,8 @@ func (controller *panelController) dispatchEvents() {
 
 				case controller.contactAddSubmit:
 					controller.handleSubmit(event.Event)
-
 				case controller.contactAddCancel:
 					controller.handleCancel(event.Event)
-
 				}
 			}
 		}

@@ -57,21 +57,6 @@ func (controller *panelController) defineControlsReceiveEvents() (err error) {
 
 	// Define the controller members by their html elements.
 	// Receive their events.
-	// example:
-
-	// Define the customer name input field.
-	if controller.addCustomerName = notJS.GetElementByID("addCustomerName"); controller.addCustomerName == null {
-		err = errors.New("unable to find #addCustomerName")
-		return
-	}
-
-	// Define the submit button.
-	if controller.addCustomerSubmit = notJS.GetElementByID("addCustomerSubmit"); controller.addCustomerSubmit == null {
-		err = errors.New("unable to find #addCustomerSubmit")
-		return
-	}
-	// Receive the submit button's onclick event.
-	controller.receiveEvent(controller.addCustomerSubmit, "onclick", false, false, false)
 
 	*/
 

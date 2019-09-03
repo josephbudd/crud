@@ -73,7 +73,6 @@ func (caller *panelCaller) dispatchMessages() {
 
 				case *message.AddContactMainProcessToRenderer:
 					caller.addContactRX(msg)
-
 				}
 			}
 		}

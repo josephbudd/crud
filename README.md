@@ -1,8 +1,6 @@
 This CRUD was originally built to test kickwasm version 5.0.0 and it's tools.
 
-This current version was built to test kickwasm version 8.1.0 and it's tools.
-
-I need to update the CRUD WIKI so that it reflects kickwasm version 8.1.0. Version 8.1.0 resulted in major changes to the framework's source code.
+This current version was built to test kickwasm version 8.1.0 and it's tools. The CRUD WIKI has been updated to this version of the CRUD.
 
 Read the CRUD wiki to learn how kickwasm and it's tools are used. The video is the CRUD running is below.
 

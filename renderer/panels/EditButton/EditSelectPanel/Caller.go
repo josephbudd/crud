@@ -18,10 +18,6 @@ type panelCaller struct {
 
 	// 1.1: Declare your panelCaller members.
 
-	// example:
-
-	state uint64
-
 	*/
 }
 

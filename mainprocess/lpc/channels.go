@@ -3,6 +3,7 @@ package lpc
 import (
 	"encoding/json"
 	"fmt"
+	"sync"
 
 	"github.com/pkg/errors"
 
@@ -29,6 +30,9 @@ type EOJer interface {
 type EOJing struct {
 	ch    chan struct{}
 	count int
+	signaled    bool
+	countMutex  *sync.Mutex
+	signalMutex *sync.Mutex
 }
 
 var (
@@ -43,6 +47,8 @@ func init() {
 	eoj = &EOJing{
 		ch:    make(chan struct{}, 1024),
 		count: 0,
+		countMutex:  &sync.Mutex{},
+		signalMutex: &sync.Mutex{},
 	}
 }
 
@@ -71,46 +77,51 @@ func (sending Sending) Payload(msg interface{}) (payload []byte, err error) {
 			return
 		}
 		id = 0
-	case *message.GetRemoveSelectContactsPageMainProcessToRenderer:
+	case *message.InitMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 1
-	case *message.GetEditSelectContactsPageMainProcessToRenderer:
+case *message.AddContactMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 2
-	case *message.GetRemoveContactMainProcessToRenderer:
+case *message.EditContactMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 3
-	case *message.AddContactMainProcessToRenderer:
+case *message.GetEditContactMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 4
-	case *message.ReloadContactsMainProcessToRenderer:
+case *message.GetEditSelectContactsPageMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 5
-	case *message.RemoveContactMainProcessToRenderer:
+case *message.GetRemoveContactMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 6
-	case *message.GetEditContactMainProcessToRenderer:
+case *message.GetRemoveSelectContactsPageMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 7
-	case *message.EditContactMainProcessToRenderer:
+case *message.ReloadContactsMainProcessToRenderer:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 8
+case *message.RemoveContactMainProcessToRenderer:
+		if bb, err = json.Marshal(msg); err != nil {
+			return
+		}
+		id = 9
 	default:
 		bb = []byte("Unknown!")
 		id = 999
@@ -144,49 +155,55 @@ func (receiving Receiving) Cargo(payloadbb []byte) (cargo interface{}, err error
 		}
 		cargo = msg
 	case 1:
-		msg := &message.GetRemoveSelectContactsPageRendererToMainProcess{}
+		msg := &message.InitRendererToMainProcess{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
 		cargo = msg
 	case 2:
-		msg := &message.GetEditSelectContactsPageRendererToMainProcess{}
-		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
-			return
-		}
-		cargo = msg
-	case 3:
-		msg := &message.GetRemoveContactRendererToMainProcess{}
-		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
-			return
-		}
-		cargo = msg
-	case 4:
 		msg := &message.AddContactRendererToMainProcess{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
 		cargo = msg
-	case 5:
-		msg := &message.ReloadContactsRendererToMainProcess{}
+	case 3:
+		msg := &message.EditContactRendererToMainProcess{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
 		cargo = msg
-	case 6:
-		msg := &message.RemoveContactRendererToMainProcess{}
-		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
-			return
-		}
-		cargo = msg
-	case 7:
+	case 4:
 		msg := &message.GetEditContactRendererToMainProcess{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
 		cargo = msg
+	case 5:
+		msg := &message.GetEditSelectContactsPageRendererToMainProcess{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
+	case 6:
+		msg := &message.GetRemoveContactRendererToMainProcess{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
+	case 7:
+		msg := &message.GetRemoveSelectContactsPageRendererToMainProcess{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
 	case 8:
-		msg := &message.EditContactRendererToMainProcess{}
+		msg := &message.ReloadContactsRendererToMainProcess{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
+	case 9:
+		msg := &message.RemoveContactRendererToMainProcess{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
@@ -199,22 +216,33 @@ func (receiving Receiving) Cargo(payloadbb []byte) (cargo interface{}, err error
 }
 
 // Signal sends on the eoj channel signaling lpc go funcs to quit.
-func (eoj EOJing) Signal() {
-	end := struct{}{}
-	for i := 0; i < eoj.count; i++ {
-		eoj.ch <- end
+func (eoj *EOJing) Signal() {
+	eoj.signalMutex.Lock()
+	if !eoj.signaled {
+		eoj.signaled = true
+		end := struct{}{}
+		for i := 0; i < eoj.count; i++ {
+			eoj.ch <- end
+		}
 	}
+	eoj.signalMutex.Unlock()
 }
 
 // NewEOJ returns a new eoj channel and increments the usage count.
-func (eoj EOJing) NewEOJ() (ch chan struct{}) {
+func (eoj *EOJing) NewEOJ() (ch chan struct{}) {
+	eoj.countMutex.Lock()
 	eoj.count++
 	ch = eoj.ch
+	eoj.countMutex.Unlock()
 	return
 }
 
 // Release decrements the usage count.
 // Call this at the end of your lpc handler func.
-func (eoj EOJing) Release() {
-	eoj.count--
+func (eoj *EOJing) Release() {
+	eoj.countMutex.Lock()
+	if eoj.count > 0 {
+		eoj.count--
+	}
+	eoj.countMutex.Unlock()
 }

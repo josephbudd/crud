@@ -24,9 +24,9 @@ type panelController struct {
 	caller    *panelCaller
 	eventCh   chan viewtools.Event
 
-	/* NOTE TO DEVELOPER. Step 1 of 5.
+	/* NOTE TO DEVELOPER. Step 1 of 4.
 
-	// Declare your panelController members.
+	// Declare your panelController fields.
 
 	*/
 
@@ -36,25 +36,38 @@ type panelController struct {
 	recordIDAttributeName     string
 }
 
-// defineControlsReceiveEvents defines controller members and starts receiving their events.
+// defineControlsHandlers defines the GUI's controllers and their event handlers.
 // Returns the error.
-func (controller *panelController) defineControlsReceiveEvents() (err error) {
+func (controller *panelController) defineControlsHandlers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(controller *panelController) defineControlsReceiveEvents()")
+			err = errors.WithMessage(err, "(controller *panelController) defineControlsHandlers()")
 		}
 	}()
 
-	/* NOTE TO DEVELOPER. Step 2 of 5.
+	/* NOTE TO DEVELOPER. Step 2 of 4.
 
-	// Define the controller members by their html elements.
-	// Receive their events.
+	// Define each controller in the GUI by it's html element.
+	// Handle each controller's events.
+
+	// example:
+
+	// Define the customer name text input GUI controller.
+	if controller.addCustomerName = notJS.GetElementByID("addCustomerName"); controller.addCustomerName == null {
+		err = errors.New("unable to find #addCustomerName")
+		return
+	}
+
+	// Define the submit button GUI controller.
+	if controller.addCustomerSubmit = notJS.GetElementByID("addCustomerSubmit"); controller.addCustomerSubmit == null {
+		err = errors.New("unable to find #addCustomerSubmit")
+		return
+	}
+	// Handle the submit button's onclick event.
+	tools.AddEventHandler(controller.handleSubmit, controller.addCustomerSubmit, "click", false)
 
 	*/
-
-	controller.sortedIndexAttributeName = "sortedIndex"
-	controller.recordIDAttributeName = "recordID"
 
 	// Define the vlist wrapper div and set it's handler.
 	if controller.removeSelectWidgetWrapper = notJS.GetElementByID("removeSelectWidgetWrapper"); controller.removeSelectWidgetWrapper == null {
@@ -88,7 +101,7 @@ func (controller *panelController) defineControlsReceiveEvents() (err error) {
 		func(button js.Value, count, state uint64) {
 			// Remember. Each button is a contact record.
 			// Find the records that will preceed the current button's record.
-			buttonIndex := notJS.GetAttributeUint64(button, controller.sortedIndexAttributeName)
+			buttonIndex := notJS.GetAttributeUint64(button, sortedIndexAttributeName)
 			startIndex := buttonIndex - count
 			if startIndex < 0 {
 				startIndex = 0
@@ -101,7 +114,7 @@ func (controller *panelController) defineControlsReceiveEvents() (err error) {
 		// Param count is the number of buttons that the selector needs.
 		// Param state is the selector's ID OR'd with it's current behavior ( appending ).
 		func(button js.Value, count, state uint64) {
-			buttonIndex := notJS.GetAttributeUint64(button, controller.sortedIndexAttributeName)
+			buttonIndex := notJS.GetAttributeUint64(button, sortedIndexAttributeName)
 			controller.caller.getRemoveSelectContactsPage(buttonIndex, count, state)
 		},
 		notJS,
@@ -111,9 +124,34 @@ func (controller *panelController) defineControlsReceiveEvents() (err error) {
 	return
 }
 
-/* NOTE TO DEVELOPER. Step 3 of 5.
+/* NOTE TO DEVELOPER. Step 3 of 4.
 
 // Handlers and other functions.
+
+// example:
+
+// import "github.com/josephbudd/crud/domain/store/record"
+
+func (controller *panelController) handleSubmit(e viewtools.Event) (nilReturn interface{}) {
+	// See renderer/viewtools/event.go.
+	// The viewtools.Event funcs.
+	//   e.PreventDefaultBehavior()
+	//   e.StopCurrentPhasePropagation()
+	//   e.StopAllPhasePropagation()
+	//   target := e.Target
+	//   event := e.Event
+
+	name := strings.TrimSpace(notJS.GetValue(controller.addCustomerName))
+	if len(name) == 0 {
+		tools.Error("Customer Name is required.")
+		return
+	}
+	r := &record.Customer{
+		Name: name,
+	}
+	controller.caller.AddCustomer(r)
+	return
+}
 
 */
 
@@ -130,9 +168,9 @@ func (controller *panelController) buildButtons(rr []*record.Contact, startSorte
 		button := notJS.CreateElementBUTTON()
 		// Button attributes.
 		// Sorted index is needed for prepending and appending more buttons to the vlist.
-		notJS.SetAttributeUint64(button, controller.sortedIndexAttributeName, startSortedIndex+uint64(i))
+		notJS.SetAttributeUint64(button, sortedIndexAttributeName, startSortedIndex+uint64(i))
 		// Record id needed when the user selects the record to remove ( onclick ).
-		notJS.SetAttributeUint64(button, controller.recordIDAttributeName, r.ID)
+		notJS.SetAttributeUint64(button, recordIDAttributeName, r.ID)
 		// Button onclick
 		cb := tools.RegisterEventCallBack(
 			func(event js.Value) interface{} {
@@ -144,7 +182,7 @@ func (controller *panelController) buildButtons(rr []*record.Contact, startSorte
 					}
 					target = notJS.ParentNode(target)
 				}
-				id := notJS.GetAttributeUint64(target, controller.recordIDAttributeName)
+				id := notJS.GetAttributeUint64(target, recordIDAttributeName)
 				controller.caller.getContact(id)
 				return nil
 			},
@@ -194,39 +232,10 @@ func (controller *panelController) buildButtons(rr []*record.Contact, startSorte
 	return
 }
 
-// dispatchEvents dispatches events from the controls.
-// It stops when it receives on the eoj channel.
-func (controller *panelController) dispatchEvents() {
-	go func() {
-		var event viewtools.Event
-		for {
-			select {
-			case <-eojCh:
-				return
-			case event = <-controller.eventCh:
-				// An event that this controller is receiving from one of its members.
-				switch event.Target {
-
-				/* NOTE TO DEVELOPER. Step 4 of 5.
-
-				// 4.1.a: Add a case for each controller member
-				//          that you are receiving events for.
-				// 4.1.b: In that case statement, pass the event to your event handler.
-
-				*/
-
-				}
-			}
-		}
-	}()
-
-	return
-}
-
 // initialCalls runs the first code that the controller needs to run.
 func (controller *panelController) initialCalls() {
 
-	/* NOTE TO DEVELOPER. Step 5 of 5.
+	/* NOTE TO DEVELOPER. Step 4 of 4.
 
 	// Make the initial calls.
 	// I use this to start up widgets. For example a virtual list widget.
@@ -234,14 +243,4 @@ func (controller *panelController) initialCalls() {
 	*/
 
 	controller.vlist.Start()
-}
-
-// receiveEvent gets this controller listening for element's event.
-// Param elements if the controler's element.
-// Param event is the event ex: "onclick".
-// Param preventDefault indicates if the default behavior of the event must be prevented.
-// Param stopPropagation indicates if the event's propogation must be stopped.
-// Param stopImmediatePropagation indicates if the event's immediate propogation must be stopped.
-func (controller *panelController) receiveEvent(element js.Value, event string, preventDefault, stopPropagation, stopImmediatePropagation bool) {
-	tools.SendEvent(controller.eventCh, element, event, preventDefault, stopPropagation, stopImmediatePropagation)
 }

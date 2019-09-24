@@ -123,6 +123,10 @@ type Tools struct {
 	countMarkupPanels        int
 	countSpawnedMarkupPanels int
 	countWidgetsWaiting      int
+
+	// spawned widgets
+
+	spawnedWidgets map[uint64]spawnedWidgetInfo
 }
 
 // NewTools constructs a new Tools
@@ -143,6 +147,8 @@ func NewTools(notJS *notjs.NotJS) *Tools {
 		panelNameHVScroll: map[string]bool{"AddPanel":false, "EditFormPanel":false, "EditNotReadyPanel":false, "EditSelectPanel":false, "RemoveFormPanel":false, "RemoveNotReadyPanel":false, "RemoveSelectPanel":false},
 
 		countMarkupPanels: 7,
+
+		spawnedWidgets: make(map[uint64]spawnedWidgetInfo, 100),
 	}
 	bodies := notJS.GetElementsByTagName("body")
 	v.body = bodies[0]
@@ -162,8 +168,7 @@ func NewTools(notJS *notjs.NotJS) *Tools {
 	v.modalMasterViewClose = notJS.GetElementByID("modalInformationMasterView-close")
 	v.modalQueue = make([]*modalViewData, 5, 5)
 	v.modalQueueLastIndex = -1
-	cb := v.RegisterEventCallBack(v.handleModalMasterViewClose, true, true, true)
-	notJS.SetOnClick(v.modalMasterViewClose, cb)
+	v.AddEventHandler(v.handleModalMasterViewClose, v.modalMasterViewClose, "click", false)
 
 	// misc
 	v.initializeGroups()

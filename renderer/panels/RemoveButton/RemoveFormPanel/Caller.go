@@ -80,7 +80,6 @@ func (caller *panelCaller) dispatchMessages() {
 					caller.getContactRX(msg)
 				case *message.RemoveContactMainProcessToRenderer:
 					caller.removeContactRX(msg)
-
 				}
 			}
 		}

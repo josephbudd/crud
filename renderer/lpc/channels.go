@@ -62,46 +62,51 @@ func (sending Sending) Payload(msg interface{}) (payload []byte, err error) {
 			return
 		}
 		id = 0
-	case *message.GetRemoveSelectContactsPageRendererToMainProcess:
+	case *message.InitRendererToMainProcess:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
 		id = 1
-	case *message.GetEditSelectContactsPageRendererToMainProcess:
-		if bb, err = json.Marshal(msg); err != nil {
-			return
-		}
-		id = 2
-	case *message.GetRemoveContactRendererToMainProcess:
-		if bb, err = json.Marshal(msg); err != nil {
-			return
-		}
-		id = 3
 	case *message.AddContactRendererToMainProcess:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
-		id = 4
-	case *message.ReloadContactsRendererToMainProcess:
-		if bb, err = json.Marshal(msg); err != nil {
-			return
-		}
-		id = 5
-	case *message.RemoveContactRendererToMainProcess:
-		if bb, err = json.Marshal(msg); err != nil {
-			return
-		}
-		id = 6
-	case *message.GetEditContactRendererToMainProcess:
-		if bb, err = json.Marshal(msg); err != nil {
-			return
-		}
-		id = 7
+		id = 2
 	case *message.EditContactRendererToMainProcess:
 		if bb, err = json.Marshal(msg); err != nil {
 			return
 		}
+		id = 3
+	case *message.GetEditContactRendererToMainProcess:
+		if bb, err = json.Marshal(msg); err != nil {
+			return
+		}
+		id = 4
+	case *message.GetEditSelectContactsPageRendererToMainProcess:
+		if bb, err = json.Marshal(msg); err != nil {
+			return
+		}
+		id = 5
+	case *message.GetRemoveContactRendererToMainProcess:
+		if bb, err = json.Marshal(msg); err != nil {
+			return
+		}
+		id = 6
+	case *message.GetRemoveSelectContactsPageRendererToMainProcess:
+		if bb, err = json.Marshal(msg); err != nil {
+			return
+		}
+		id = 7
+	case *message.ReloadContactsRendererToMainProcess:
+		if bb, err = json.Marshal(msg); err != nil {
+			return
+		}
 		id = 8
+	case *message.RemoveContactRendererToMainProcess:
+		if bb, err = json.Marshal(msg); err != nil {
+			return
+		}
+		id = 9
 	default:
 		bb = []byte("Unknown!")
 		id = 999
@@ -134,50 +139,50 @@ func (receiving Receiving) Cargo(payloadbb []byte) (cargo interface{}, err error
 			return
 		}
 		cargo = msg
-	case 1:
-		msg := &message.GetRemoveSelectContactsPageMainProcessToRenderer{}
-		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
-			return
-		}
-		cargo = msg
 	case 2:
-		msg := &message.GetEditSelectContactsPageMainProcessToRenderer{}
-		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
-			return
-		}
-		cargo = msg
-	case 3:
-		msg := &message.GetRemoveContactMainProcessToRenderer{}
-		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
-			return
-		}
-		cargo = msg
-	case 4:
 		msg := &message.AddContactMainProcessToRenderer{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
 		cargo = msg
-	case 5:
-		msg := &message.ReloadContactsMainProcessToRenderer{}
+	case 3:
+		msg := &message.EditContactMainProcessToRenderer{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
 		cargo = msg
-	case 6:
-		msg := &message.RemoveContactMainProcessToRenderer{}
-		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
-			return
-		}
-		cargo = msg
-	case 7:
+	case 4:
 		msg := &message.GetEditContactMainProcessToRenderer{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}
 		cargo = msg
+	case 5:
+		msg := &message.GetEditSelectContactsPageMainProcessToRenderer{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
+	case 6:
+		msg := &message.GetRemoveContactMainProcessToRenderer{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
+	case 7:
+		msg := &message.GetRemoveSelectContactsPageMainProcessToRenderer{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
 	case 8:
-		msg := &message.EditContactMainProcessToRenderer{}
+		msg := &message.ReloadContactsMainProcessToRenderer{}
+		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
+			return
+		}
+		cargo = msg
+	case 9:
+		msg := &message.RemoveContactMainProcessToRenderer{}
 		if err = json.Unmarshal(payload.Cargo, msg); err != nil {
 			return
 		}

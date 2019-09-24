@@ -14,6 +14,11 @@ import (
 
 */
 
+const (
+	// emptyString is an empty string.
+	emptyString = ""
+)
+
 var (
 	// quitCh will close the application
 	quitCh chan struct{}
@@ -35,7 +40,4 @@ var (
 
 	// The javascript null value
 	null = js.Null()
-
-	// emptyString is an empty string.
-	emptyString = ""
 )

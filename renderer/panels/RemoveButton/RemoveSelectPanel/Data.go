@@ -14,6 +14,11 @@ import (
 
 */
 
+const (
+	sortedIndexAttributeName = "sortedIndex"
+	recordIDAttributeName    = "recordID"
+)
+
 var (
 	// quitCh will close the application
 	quitCh chan struct{}

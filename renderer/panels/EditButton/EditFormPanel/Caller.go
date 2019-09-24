@@ -86,7 +86,6 @@ func (caller *panelCaller) dispatchMessages() {
 					caller.getContactRX(msg)
 				case *message.EditContactMainProcessToRenderer:
 					caller.editContactRX(msg)
-
 				}
 			}
 		}

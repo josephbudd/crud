@@ -24,7 +24,11 @@ $ ./crud
 
 ## If you want to build CRUD on linux
 
-### Get CRUD's other dependencies
+### Download kickwasm and it's tools.
+
+* [kickwasm and it's tools](https://github.com/josephbudd/kickwasm#user-content-installation)
+
+### Get CRUD's dependencies
 
 * [the boltdb package.](https://github.com/boltdb/bolt)
 * [the yaml package.](https://gopkg.in/yaml.v2)
@@ -35,18 +39,6 @@ $ ./crud
 $ go get github.com/boltdb/bolt/...
 $ go get gopkg.in/yaml.v2
 $ go get github.com/gorilla/websocket
-
-```
-
-### Get the kickpack tool
-
-The new renderer build scripts which are **renderer/build.sh** and **renderer/buildPack.sh** use kickpack. So you will need to download, build and install kickpack.
-
-``` shell
-
-$ go get -u github.com/josephbudd/kickpack
-$ cd ~/go/src/github.com/josephbudd/kickpack
-$ go install
 
 ```
 

@@ -134,45 +134,45 @@ div.pad-color-level-0
 
 
 
-/* color level Add */
+/* color level AddButton */
 
-#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-Add
+#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-AddButton
 {
   background-color:hsl(50, 23%, 27%);
   color:white;
   padding:5px;
 }
 
-#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-Add
+#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-AddButton
 {
   color: hsl(50, 23%, 27%);
 }
 
-button.back-color-level-Add
+button.back-color-level-AddButton
 {
   background-color:hsl(50, 23%, 27%);
   color:hsl(40, 37%, 57%);
   border-color:white;
 }
-button.back-color-level-Add:hover
+button.back-color-level-AddButton:hover
 {
   color:white;
   border-color:hsl(40, 37%, 57%);
 }
 
-div.pad-color-level-Add
+div.pad-color-level-AddButton
 {
   background-color: hsl(50, 23%, 27%);
 }
 
-button.pad-button-color-level-Add
+button.pad-button-color-level-AddButton
 {
   background-color: hsl(40, 37%, 57%);
   color:black;
   border-color:black;
 }
 
-button.pad-button-color-level-Add:hover
+button.pad-button-color-level-AddButton:hover
 {
   background-color: hsl(40, 37%, 37%);
   color:white;
@@ -180,45 +180,45 @@ button.pad-button-color-level-Add:hover
 }
 
 
-/* color level Edit */
+/* color level EditButton */
 
-#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-Edit
+#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-EditButton
 {
   color: hsl(70, 23%, 27%);
 }
 
-#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-Edit
+#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-EditButton
 {
   background-color: hsl(70, 23%, 27%);
   color:white;
   padding:5px;
 }
 
-button.back-color-level-Edit
+button.back-color-level-EditButton
 {
   background-color:hsl(70, 23%, 27%);
   color:hsl(60, 37%, 57%);
   border-color:white;
 }
-button.back-color-level-Edit:hover
+button.back-color-level-EditButton:hover
 {
   color:white;
   border-color:hsl(60, 37%, 57%);
 }
 
-div.pad-color-level-Edit
+div.pad-color-level-EditButton
 {
   background-color: hsl(70, 23%, 27%);
 }
 
-button.pad-button-color-level-Edit
+button.pad-button-color-level-EditButton
 {
   background-color: hsl(60, 37%, 57%);
   color:black;
   border-color:black;
 }
 
-button.pad-button-color-level-Edit:hover
+button.pad-button-color-level-EditButton:hover
 {
   background-color: hsl(60, 37%, 37%);
   color:white;
@@ -227,45 +227,45 @@ button.pad-button-color-level-Edit:hover
 
 
 
-/* color level Remove */
+/* color level RemoveButton */
 
-#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-Remove
+#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-RemoveButton
 {
   color: hsl(150, 23%, 27%);
 }
 
-#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-Remove
+#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-RemoveButton
 {
   background-color: hsl(150, 23%, 27%);
   color:white;
   padding:5px;
 }
 
-button.back-color-level-Remove
+button.back-color-level-RemoveButton
 {
   background-color:hsl(150, 23%, 27%);
   color:hsl(140, 37%, 57%);
   border-color:white;
 }
-button.back-color-level-Remove:hover
+button.back-color-level-RemoveButton:hover
 {
   color:white;
   border-color:hsl(140, 37%, 57%);
 }
 
-div.pad-color-level-Remove
+div.pad-color-level-RemoveButton
 {
   background-color: hsl(150, 23%, 27%);
 }
 
-button.pad-button-color-level-Remove
+button.pad-button-color-level-RemoveButton
 {
   background-color: hsl(140, 37%, 57%);
   color:black;
   border-color:black;
 }
 
-button.pad-button-color-level-Remove:hover
+button.pad-button-color-level-RemoveButton:hover
 {
   background-color: hsl(140, 37%, 37%);
   color:white;

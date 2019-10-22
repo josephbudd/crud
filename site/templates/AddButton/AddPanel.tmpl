@@ -4,12 +4,11 @@
 Panel name: "AddPanel"
 
 Panel note: Presentation:
- An empty contact form, "Add" and "Cancel" buttons.
- * An add button that either warns of missing fields or submits the form.
- * A cancel button that clears the form and goes back.
- * A success or error alert to the user when the main process reports back on the submittion.
-Render:
- Add button handler warns of missing fields or submits the form input as a new contact record.
+ An empty contact form, with "Add" and "Cancel" buttons.
+Renderer:
+ * The add button either warns of missing fields or submits the form.
+ * The cancel button clears the form and goes back.
+ * There must be a success or error alert to the user when the main process reports back on the submission.
 Main Process:
  Saves the new record updating the record id. Reports back to the renderer with updated record and error.
 LPC:

@@ -1,188 +1,180 @@
 title : Contacts CRUD
 importPath : github.com/josephbudd/crud
-services :
-  - name : Add
-    button :
-      name : AddButton
-      label : Add
-      heading : Add A New Contact
-      cc : Add
-      panels :
-        - name : AddPanel
-          note : |
-            Presentation:
-             An empty contact form, "Add" and "Cancel" buttons.
-             * An add button that either warns of missing fields or submits the form.
-             * A cancel button that clears the form and goes back.
-             * A success or error alert to the user when the main process reports back on the submittion.
-            Render:
-             Add button handler warns of missing fields or submits the form input as a new contact record.
-            Main Process:
-             Saves the new record updating the record id. Reports back to the renderer with updated record and error.
-            LPC:
-             AddContact
-              RendererToMainProcess:
-                Record: Contact Record
-              MainProcessToRenderer;
-                Error: bool
-                ErrorMessage: string
-                Record: Contact Record
-          markup : |
-            <p>
-              <label for="contactAddName">Name</label>
-              <input type="text" id="contactAddName">
-            </p>
-            <p>
-              <label for="contactAddAddress1">Address 1</label>
-              <input type="text" id="contactAddAddress1">
-            </p>
-            <p>
-              <label for="contactAddAddress2">Address 2</label>
-              <input type="text" id="contactAddAddress2">
-            </p>
-            <p>
-              <label for="contactAddCity">City</label>
-              <input type="text" id="contactAddCity">
-            </p>
-            <p>
-              <label for="contactAddState">State</label>
-              <input type="text" id="contactAddState">
-            </p>
-            <p>
-              <label for="contactAddZip">Zip</label>
-              <input type="text" id="contactAddZip">
-            </p>
-            <p>
-              <label for="contactAddPhone">Phone</label>
-              <input type="text" id="contactAddPhone">
-            </p>
-            <p>
-              <label for="contactAddEmail">E-mail</label>
-              <input type="text" id="contactAddEmail">
-            </p>
-            <p>
-              <label for="contactAddSocial">Social URLs</label>
-              <textarea id="contactAddSocial"></textarea>
-            </p>
-            <p>
-              <button id="contactAddSubmit">Add</button>
-              <button id="contactAddCancel">Cancel</button>
-            </p>
-  - name : Edit
-    button :
-      name : EditButton
-      label : Edit
-      heading : Edit A Contact
-      cc : Edit
-      panels :
-        - name : EditNotReadyPanel
-          note : Static text displayed when there are no contacts in the store.
-          markup : <p>You don't have any contacts to edit.</p>
-        - name : EditSelectPanel
-          note : |
-            A select widget sorted by name.
-            The widget needs to be rebuilt anytime a conact is added, edited or removed.
-          markup : <div id="editSelectWidgetWrapper"></div>
-        - name : EditFormPanel
-          note : A contact form with "edit" and "cancel" buttons.
-          markup : |
-            <p>
-              <label for="contactEditName">Name</label>
-              <input type="text" id="contactEditName">
-            </p>
-            <p>
-              <label for="contactEditAddress1">Address 1</label>
-              <input type="text" id="contactEditAddress1">
-            </p>
-            <p>
-              <label for="contactEditAddress2">Address 2</label>
-              <input type="text" id="contactEditAddress2">
-            </p>
-            <p>
-              <label for="contactEditCity">City</label>
-              <input type="text" id="contactEditCity">
-            </p>
-            <p>
-              <label for="contactEditState">State</label>
-              <input type="text" id="contactEditState">
-            </p>
-            <p>
-              <label for="contactEditZip">Zip</label>
-              <input type="text" id="contactEditZip">
-            </p>
-            <p>
-              <label for="contactEditPhone">Phone</label>
-              <input type="text" id="contactEditPhone">
-            </p>
-            <p>
-              <label for="contactEditEmail">E-mail</label>
-              <input type="text" id="contactEditEmail">
-            </p>
-            <p>
-              <label for="contactEditSocial">Social URLs</label>
-              <textarea id="contactEditSocial"></textarea>
-            </p>
-            <p>
-              <button id="contactEditSubmit">Edit</button>
-              <button id="contactEditCancel">Cancel</button>
-            </p>
-  - name : Remove
-    button :
-      name : RemoveButton
-      label : Remove
-      heading : Remove A Contact
-      cc : Remove
-      panels :
-        - name : RemoveNotReadyPanel
-          note : Static text displayed when there are no contacts in the store.
-          markup : <p>You don't have any contacts to remove.</p>
-        - name : RemoveSelectPanel
-          note : |
-            A select widget sorted by name.
-            The widget needs to be rebuilt anytime a contact is added, edited or removed.
-          markup : <div id="removeSelectWidgetWrapper" class="VList"></div>
-        - name : RemoveFormPanel
-          note : A contact display with "remove" and "cancel" buttons.
-          markup : |
-            <p>
-              <b>Name</b>
-              <span id="contactRemoveName"></span>
-            </p>
-            <p>
-              <b>Address 1</b>
-              <span id="contactRemoveAddress1"></span>
-            </p>
-            <p>
-              <b>Address 2</b>
-              <span id="contactRemoveAddress2"></span>
-            </p>
-            <p>
-              <b>City</b>
-              <span id="contactRemoveCity"></span>
-            </p>
-            <p>
-              <b>State</b>
-              <span id="contactRemoveState"></span>
-            </p>
-            <p>
-              <b>Zip</b>
-              <span id="contactRemoveZip"></span>
-            </p>
-            <p>
-              <b>Phone</b>
-              <span id="contactRemovePhone"></span>
-            </p>
-            <p>
-              <b>E-mail</b>
-              <span id="contactRemoveEmail"></span>
-            </p>
-            <p>
-              <b>Social URLs</b>
-              <span id="contactRemoveSocial"></span>
-            </p>
-            <p>
-              <button id="contactRemoveSubmit">Remove</button>
-              <button id="contactRemoveCancel">Cancel</button>
-            </p>
-
-
+buttons :
+  - name : AddButton
+    label : Add
+    heading : Add A New Contact
+    cc : Add
+    panels :
+      - name : AddPanel
+        note : |
+          Presentation:
+            An empty contact form, "Add" and "Cancel" buttons.
+            * An add button that either warns of missing fields or submits the form.
+            * A cancel button that clears the form and goes back.
+            * A success or error alert to the user when the main process reports back on the submittion.
+          Render:
+            Add button handler warns of missing fields or submits the form input as a new contact record.
+          Main Process:
+            Saves the new record updating the record id. Reports back to the renderer with updated record and error.
+          LPC:
+            AddContact
+            RendererToMainProcess:
+              Record: Contact Record
+            MainProcessToRenderer;
+              Error: bool
+              ErrorMessage: string
+              Record: Contact Record
+        markup : |
+          <p>
+            <label for="contactAddName">Name</label>
+            <input type="text" id="contactAddName">
+          </p>
+          <p>
+            <label for="contactAddAddress1">Address 1</label>
+            <input type="text" id="contactAddAddress1">
+          </p>
+          <p>
+            <label for="contactAddAddress2">Address 2</label>
+            <input type="text" id="contactAddAddress2">
+          </p>
+          <p>
+            <label for="contactAddCity">City</label>
+            <input type="text" id="contactAddCity">
+          </p>
+          <p>
+            <label for="contactAddState">State</label>
+            <input type="text" id="contactAddState">
+          </p>
+          <p>
+            <label for="contactAddZip">Zip</label>
+            <input type="text" id="contactAddZip">
+          </p>
+          <p>
+            <label for="contactAddPhone">Phone</label>
+            <input type="text" id="contactAddPhone">
+          </p>
+          <p>
+            <label for="contactAddEmail">E-mail</label>
+            <input type="text" id="contactAddEmail">
+          </p>
+          <p>
+            <label for="contactAddSocial">Social URLs</label>
+            <textarea id="contactAddSocial"></textarea>
+          </p>
+          <p>
+            <button id="contactAddSubmit">Add</button>
+            <button id="contactAddCancel">Cancel</button>
+          </p>
+  - name : EditButton
+    label : Edit
+    heading : Edit A Contact
+    cc : Edit
+    panels :
+      - name : EditNotReadyPanel
+        note : Static text displayed when there are no contacts in the store.
+        markup : <p>You don't have any contacts to edit.</p>
+      - name : EditSelectPanel
+        note : |
+          A select widget sorted by name.
+          The widget needs to be rebuilt anytime a conact is added, edited or removed.
+        markup : <div id="editSelectWidgetWrapper"></div>
+      - name : EditFormPanel
+        note : A contact form with "edit" and "cancel" buttons.
+        markup : |
+          <p>
+            <label for="contactEditName">Name</label>
+            <input type="text" id="contactEditName">
+          </p>
+          <p>
+            <label for="contactEditAddress1">Address 1</label>
+            <input type="text" id="contactEditAddress1">
+          </p>
+          <p>
+            <label for="contactEditAddress2">Address 2</label>
+            <input type="text" id="contactEditAddress2">
+          </p>
+          <p>
+            <label for="contactEditCity">City</label>
+            <input type="text" id="contactEditCity">
+          </p>
+          <p>
+            <label for="contactEditState">State</label>
+            <input type="text" id="contactEditState">
+          </p>
+          <p>
+            <label for="contactEditZip">Zip</label>
+            <input type="text" id="contactEditZip">
+          </p>
+          <p>
+            <label for="contactEditPhone">Phone</label>
+            <input type="text" id="contactEditPhone">
+          </p>
+          <p>
+            <label for="contactEditEmail">E-mail</label>
+            <input type="text" id="contactEditEmail">
+          </p>
+          <p>
+            <label for="contactEditSocial">Social URLs</label>
+            <textarea id="contactEditSocial"></textarea>
+          </p>
+          <p>
+            <button id="contactEditSubmit">Edit</button>
+            <button id="contactEditCancel">Cancel</button>
+          </p>
+  - name : RemoveButton
+    label : Remove
+    heading : Remove A Contact
+    cc : Remove
+    panels :
+      - name : RemoveNotReadyPanel
+        note : Static text displayed when there are no contacts in the store.
+        markup : <p>You don't have any contacts to remove.</p>
+      - name : RemoveSelectPanel
+        note : |
+          A select widget sorted by name.
+          The widget needs to be rebuilt anytime a contact is added, edited or removed.
+        markup : <div id="removeSelectWidgetWrapper" class="VList"></div>
+      - name : RemoveFormPanel
+        note : A contact display with "remove" and "cancel" buttons.
+        markup : |
+          <p>
+            <b>Name</b>
+            <span id="contactRemoveName"></span>
+          </p>
+          <p>
+            <b>Address 1</b>
+            <span id="contactRemoveAddress1"></span>
+          </p>
+          <p>
+            <b>Address 2</b>
+            <span id="contactRemoveAddress2"></span>
+          </p>
+          <p>
+            <b>City</b>
+            <span id="contactRemoveCity"></span>
+          </p>
+          <p>
+            <b>State</b>
+            <span id="contactRemoveState"></span>
+          </p>
+          <p>
+            <b>Zip</b>
+            <span id="contactRemoveZip"></span>
+          </p>
+          <p>
+            <b>Phone</b>
+            <span id="contactRemovePhone"></span>
+          </p>
+          <p>
+            <b>E-mail</b>
+            <span id="contactRemoveEmail"></span>
+          </p>
+          <p>
+            <b>Social URLs</b>
+            <span id="contactRemoveSocial"></span>
+          </p>
+          <p>
+            <button id="contactRemoveSubmit">Remove</button>
+            <button id="contactRemoveCancel">Cancel</button>
+          </p>

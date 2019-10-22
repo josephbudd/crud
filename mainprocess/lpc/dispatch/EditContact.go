@@ -27,6 +27,7 @@ import (
 //   In your go routine
 //     1. Get a channel to listen to with eojing.NewEOJ().
 //     2. Before your go routine returns, release that channel with eojing.Release().
+// Param stores is a struct the contains each of your stores.
 func handleEditContact(rxmessage *message.EditContactRendererToMainProcess, sending lpc.Sending, eojing lpc.EOJer, stores *store.Stores) {
 	txmessage := &message.EditContactMainProcessToRenderer{
 		Record: rxmessage.Record,

@@ -6,6 +6,9 @@ import (
 	"syscall/js"
 
 	"github.com/pkg/errors"
+
+	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/josephbudd/crud/rendererprocess/framework/viewtools"
 )
 
 /*
@@ -30,10 +33,12 @@ func (group *panelGroup) defineMembers() (err error) {
 		}
 	}()
 
-	if group.addPanel = notJS.GetElementByID("tabsMasterView-home-pad-AddButton-AddPanel"); group.addPanel == null {
-		err = errors.New("unable to find #tabsMasterView-home-pad-AddButton-AddPanel")
+    var panel *markup.Element
+ if panel = document.ElementByID("mainMasterView-home-pad-AddButton-AddPanel"); panel == nil {
+		err = errors.New("unable to find #mainMasterView-home-pad-AddButton-AddPanel")
 		return
-	}
+    }
+    group.addPanel = panel.JSValue()
 
 	return
 }
@@ -45,7 +50,7 @@ func (group *panelGroup) defineMembers() (err error) {
 */
 
 // showAddPanel shows the panel you named AddPanel while hiding any other panels in this panel group.
-// This panel's id is tabsMasterView-home-pad-AddButton-AddPanel.
+// This panel's id is mainMasterView-home-pad-AddButton-AddPanel.
 // This panel either becomes visible immediately or whenever this group of panels is made visible.  Whenever could be immediately if this panel group is currently visible.
 // Param force boolean effects when this panel becomes visible.
 //  * if force is true then
@@ -54,15 +59,16 @@ func (group *panelGroup) defineMembers() (err error) {
 //  * if force is false then whenever.
 /* Your note for this panel is:
 Presentation:
- An empty contact form, with "Add" and "Cancel" buttons.
-Renderer:
- * The add button either warns of missing fields or submits the form.
- * The cancel button clears the form and goes back.
- * There must be a success or error alert to the user when the main process reports back on the submission.
+  An empty contact form, "Add" and "Cancel" buttons.
+  * An add button that either warns of missing fields or submits the form.
+  * A cancel button that clears the form and goes back.
+  * A success or error alert to the user when the main process reports back on the submittion.
+Render:
+  Add button handler warns of missing fields or submits the form input as a new contact record.
 Main Process:
- Saves the new record updating the record id. Reports back to the renderer with updated record and error.
+  Saves the new record updating the record id. Reports back to the renderer with updated record and error.
 LPC:
- AddContact
+  AddContact
   RendererToMainProcess:
     Record: Contact Record
   MainProcessToRenderer;
@@ -72,5 +78,5 @@ LPC:
 
 */
 func (group *panelGroup) showAddPanel(force bool) {
-	tools.ShowPanelInButtonGroup(group.addPanel, force)
+	viewtools.ShowPanelInButtonGroup(group.addPanel, force)
 }

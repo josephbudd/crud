@@ -31,18 +31,6 @@ body {
   border-color:rgb(88, 65, 1);
 }
 
-#closerMasterView
-{
-  background: hsla(44, 100%, 19%, 0.8);
-  border-color:black;
-}
-
-#closerMasterView-center
-{
-  background-color:hsla(44, 100%, 40%, 0.8);
-  border-color:rgb(88, 65, 1);
-}
-
 /******************************************************************************
 
     panels
@@ -86,7 +74,7 @@ div.tab-bar > button.selected-tab
 
 ******************************************************************************/
 
-#tabsMasterView-home-pad
+#mainMasterView-home-pad
 {
   border-color:black;
 }
@@ -97,7 +85,7 @@ div.tab-bar > button.selected-tab
 
 ******************************************************************************/
 
-#tabsMasterView-home-slider-collection > .slider-panel > .slider-panel-pad
+#mainMasterView-home-slider-collection > .slider-panel > .slider-panel-pad
 {
   color:white;
 }
@@ -110,7 +98,7 @@ div.tab-bar > button.selected-tab
 
 /* color level 0 if for the home button pad */
 
-#tabsMasterView > h1.heading-of-panel
+#mainMasterView > h1.heading-of-panel
 {
   color: black;
 }
@@ -136,14 +124,14 @@ div.pad-color-level-0
 
 /* color level AddButton */
 
-#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-AddButton
+#mainMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-AddButton
 {
   background-color:hsl(50, 23%, 27%);
   color:white;
   padding:5px;
 }
 
-#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-AddButton
+#mainMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-AddButton
 {
   color: hsl(50, 23%, 27%);
 }
@@ -182,12 +170,12 @@ button.pad-button-color-level-AddButton:hover
 
 /* color level EditButton */
 
-#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-EditButton
+#mainMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-EditButton
 {
   color: hsl(70, 23%, 27%);
 }
 
-#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-EditButton
+#mainMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-EditButton
 {
   background-color: hsl(70, 23%, 27%);
   color:white;
@@ -229,12 +217,12 @@ button.pad-button-color-level-EditButton:hover
 
 /* color level RemoveButton */
 
-#tabsMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-RemoveButton
+#mainMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-RemoveButton
 {
   color: hsl(150, 23%, 27%);
 }
 
-#tabsMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-RemoveButton
+#mainMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-RemoveButton
 {
   background-color: hsl(150, 23%, 27%);
   color:white;
@@ -268,6 +256,53 @@ button.pad-button-color-level-RemoveButton
 button.pad-button-color-level-RemoveButton:hover
 {
   background-color: hsl(140, 37%, 37%);
+  color:white;
+  border-color:white;
+}
+
+
+
+/* color level PrintButton */
+
+#mainMasterView-home-slider-collection > .slider-panel > h2.heading-of-panel-level-PrintButton
+{
+  color: hsl(200, 23%, 27%);
+}
+
+#mainMasterView-home-slider-collection > .slider-panel > div.heading-of-panel > h2.cookie-crumb-level-PrintButton
+{
+  background-color: hsl(200, 23%, 27%);
+  color:white;
+  padding:5px;
+}
+
+button.back-color-level-PrintButton
+{
+  background-color:hsl(200, 23%, 27%);
+  color:hsl(190, 37%, 57%);
+  border-color:white;
+}
+button.back-color-level-PrintButton:hover
+{
+  color:white;
+  border-color:hsl(190, 37%, 57%);
+}
+
+div.pad-color-level-PrintButton
+{
+  background-color: hsl(200, 23%, 27%);
+}
+
+button.pad-button-color-level-PrintButton
+{
+  background-color: hsl(190, 37%, 57%);
+  color:black;
+  border-color:black;
+}
+
+button.pad-button-color-level-PrintButton:hover
+{
+  background-color: hsl(190, 37%, 37%);
   color:white;
   border-color:white;
 }
@@ -329,36 +364,6 @@ button.pad-button-color-level-RemoveButton:hover
 .modal-user-content,
 .modal-user-content th,
 .modal-user-content td
-{
-  background: white;
-  color:black;
-}
-
-/******************************************************************************
-
-  closer user content
-
-******************************************************************************/
-
-.closer-user-content a {color:black;}
-.closer-user-content a:hover{color:black;}
-.closer-user-content a:visited{color:black;}
-
-.closer-user-content button
-{
-  border-color:black;
-  color:black;
-  background: white;
-}
-.closer-user-content button:hover
-{
-  background: white;
-  color:black;
-}
-
-.closer-user-content,
-.closer-user-content th,
-.closer-user-content td
 {
   background: white;
   color:black;

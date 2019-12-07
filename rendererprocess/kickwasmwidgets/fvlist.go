@@ -1,10 +1,9 @@
 package kickwasmwidgets
 
 import (
-	"syscall/js"
-
-	"github.com/josephbudd/crud/rendererprocess/notjs"
-	"github.com/josephbudd/crud/rendererprocess/viewtools"
+	"github.com/josephbudd/crud/rendererprocess/dom"
+	"github.com/josephbudd/crud/rendererprocess/event"
+	"github.com/josephbudd/crud/rendererprocess/markup"
 )
 
 const (
@@ -21,31 +20,32 @@ const (
 
 // FVListPanel is information about a carousel panel.
 type FVListPanel struct {
-	Panel       js.Value
-	ListWrapper js.Value
-	Arrow       js.Value
-	Title       js.Value
+	Panel       *markup.Element
+	ListWrapper *markup.Element
+	Arrow       *markup.Element
+	Title       *markup.Element
 	VList       *VList
 }
 
 // FVList is a carousel of VLists.
 // The lists are a series of filters followed by a final filtered list of articles.
 type FVList struct {
-	div     js.Value
+	div     *markup.Element
 	IDState uint64
 	panels  []*FVListPanel
 
 	onSizeFunc   func()
 	onNoSizeFunc func()
 
-	NotJS            *notjs.NotJS
-	Tools            *viewtools.Tools
 	addedRecordVList bool
 
 	StateMatch string
 	CityMatch  string
 
 	openPanelIndex int
+
+	document *dom.DOM
+	vlist    *VList
 }
 
 // NewFVList constructs a new FVList.
@@ -63,22 +63,19 @@ type FVList struct {
 //  is called when there will be a size to the list.
 // Param onNoSizeFunc
 //  is called when there will be no size to the list.
-// Param notJS is a pointer to notjs.NotJS
-func NewFVList(div js.Value,
+// Param document is a pointer to the *dom.DOM of the panel that this goes in.
+func NewFVList(div *markup.Element,
 	IDState uint64,
 	onSizeFunc func(),
 	onNoSizeFunc func(),
-	notJS *notjs.NotJS,
-	tools *viewtools.Tools,
+	document *dom.DOM,
 ) *FVList {
 	// setup div
-	notJS.RemoveChildNodes(div)
+	div.RemoveChildren()
 	return &FVList{
 		div:            div,
 		IDState:        IDState,
 		panels:         make([]*FVListPanel, 0, 5),
-		NotJS:          notJS,
-		Tools:          tools,
 		onSizeFunc:     onSizeFunc,
 		onNoSizeFunc:   onNoSizeFunc,
 		openPanelIndex: -1,
@@ -100,22 +97,19 @@ func NewFVList(div js.Value,
 //  is called when there will be a size to the list.
 // Param onNoSizeFunc
 //  is called when there will be no size to the list.
-// Param notJS is a pointer to notjs.NotJS
-func BuildFVList(div js.Value,
+// Param document is a pointer to the *dom.DOM of the panel that this goes in.
+func BuildFVList(div *markup.Element,
 	IDState uint64,
 	onSizeFunc func(),
 	onNoSizeFunc func(),
-	notJS *notjs.NotJS,
-	tools *viewtools.Tools,
+	document *dom.DOM,
 ) FVList {
 	// setup div
-	notJS.RemoveChildNodes(div)
+	div.RemoveChildren()
 	return FVList{
 		div:            div,
 		IDState:        IDState,
 		panels:         make([]*FVListPanel, 0, 5),
-		NotJS:          notJS,
-		Tools:          tools,
 		onSizeFunc:     onSizeFunc,
 		onNoSizeFunc:   onNoSizeFunc,
 		openPanelIndex: -1,
@@ -127,23 +121,23 @@ func (fvlist *FVList) AddFirstFilter(
 	title string,
 	max uint64,
 	needToInitializeFunc func(count, state uint64),
-	needToPrependFunc func(button js.Value, count, state uint64),
-	needToAppendFunc func(button js.Value, count, state uint64),
+	needToPrependFunc func(button *markup.Element, count, state uint64),
+	needToAppendFunc func(button *markup.Element, count, state uint64),
 ) {
 	if len(fvlist.panels) > 0 {
 		panic("you must call FVList.AddFilter after calling FVList.AddFirstFilter")
 	}
 	fvlist.addList(max, needToInitializeFunc, needToPrependFunc, needToAppendFunc, filterWrapper1ClassName)
 	panel := fvlist.panels[0]
-	fvlist.NotJS.SetInnerText(panel.Title, title)
+	panel.Title.SetInnerText(title)
 }
 
 // AddAnotherFilter adds an additional filter list.
 func (fvlist *FVList) AddAnotherFilter(
 	max uint64,
 	needToInitializeFunc func(count, state uint64),
-	needToPrependFunc func(button js.Value, count, state uint64),
-	needToAppendFunc func(button js.Value, count, state uint64),
+	needToPrependFunc func(button *markup.Element, count, state uint64),
+	needToAppendFunc func(button *markup.Element, count, state uint64),
 ) {
 	if len(fvlist.panels) == 0 {
 		panic("you must call FVList.AddFirstFilter before calling FVList.AddFilter")
@@ -158,8 +152,8 @@ func (fvlist *FVList) AddAnotherFilter(
 func (fvlist *FVList) AddRecordList(
 	max uint64,
 	needToInitializeFunc func(count, state uint64),
-	needToPrependFunc func(button js.Value, count, state uint64),
-	needToAppendFunc func(button js.Value, count, state uint64),
+	needToPrependFunc func(button *markup.Element, count, state uint64),
+	needToAppendFunc func(button *markup.Element, count, state uint64),
 ) {
 	if len(fvlist.panels) == 0 {
 		panic("if you don't have any filters use VList not FVlist")
@@ -178,7 +172,7 @@ func (fvlist *FVList) Start() {
 }
 
 // Build rebuilds the fvlist in some way.
-func (fvlist *FVList) Build(buttons []js.Value, state, recordCount uint64) {
+func (fvlist *FVList) Build(buttons []*markup.Element, state, recordCount uint64) {
 	panelIndex := StateToSubPanelIndex(state)
 	panel := fvlist.panels[panelIndex]
 	panel.VList.Build(buttons, state, recordCount)
@@ -187,20 +181,20 @@ func (fvlist *FVList) Build(buttons []js.Value, state, recordCount uint64) {
 
 // Hide hides the fvlist.
 func (fvlist *FVList) Hide() {
-	fvlist.Tools.ElementHide(fvlist.div)
+	fvlist.div.Hide()
 }
 
 // Show unshides the fvlist.
 func (fvlist *FVList) Show() {
-	fvlist.Tools.ElementShow(fvlist.div)
+	fvlist.div.Show()
 }
 
 // Toggle toggles the fvlist visibility.
 func (fvlist *FVList) Toggle() {
-	if fvlist.Tools.ElementIsShown(fvlist.div) {
-		fvlist.Tools.ElementHide(fvlist.div)
+	if fvlist.div.IsShown() {
+		fvlist.div.Hide()
 	} else {
-		fvlist.Tools.ElementShow(fvlist.div)
+		fvlist.div.Show()
 	}
 }
 
@@ -215,9 +209,9 @@ func (fvlist *FVList) OpenSubPanel(subPanelIndex int) {
 	fvlist.openPanelIndex = subPanelIndex
 	for i, panel := range fvlist.panels {
 		if i != subPanelIndex {
-			fvlist.Tools.ElementHide(panel.Panel)
+			panel.Panel.Hide()
 		} else {
-			fvlist.Tools.ElementShow(panel.Panel)
+			panel.Panel.Show()
 		}
 	}
 }
@@ -225,7 +219,7 @@ func (fvlist *FVList) OpenSubPanel(subPanelIndex int) {
 // SetSubPanelTitle sets the text of a sub panel's list title.
 func (fvlist *FVList) SetSubPanelTitle(subPanelIndex int, text string) {
 	panel := fvlist.panels[subPanelIndex]
-	fvlist.NotJS.SetInnerText(panel.Title, text)
+	panel.Title.SetInnerText(text)
 }
 
 // GetSubPanel returns one of the fvlist panel structs.
@@ -242,50 +236,44 @@ func (fvlist *FVList) GetSubPanel(index int) *FVListPanel {
 func (fvlist *FVList) addList(
 	max uint64,
 	needToInitializeFunc func(count, state uint64),
-	needToPrependFunc func(button js.Value, count, state uint64),
-	needToAppendFunc func(button js.Value, count, state uint64),
+	needToPrependFunc func(button *markup.Element, count, state uint64),
+	needToAppendFunc func(button *markup.Element, count, state uint64),
 	wrapperClassName string,
 ) {
 	// filter wrapper
 	i := len(fvlist.panels)
-	notJS := fvlist.NotJS
-	tools := fvlist.Tools
-	wrapper := notJS.CreateElementDIV()
-	//notJS.SetID(wrapper, fmt.Sprintf(subDivIndexAttributeNameFormatter, i))
+	wrapper := fvlist.document.NewDIV()
+	// wrapper.SetID(fmt.Sprintf(subDivIndexAttributeNameFormatter, i))
 	// left arrow
-	var arrow js.Value
-	notJS.ClassListAddClass(wrapper, wrapperClassName)
+	var arrow *markup.Element
+	wrapper.AddClass(wrapperClassName)
 	if i > 0 {
-		arrow = notJS.CreateElementBUTTON()
-		notJS.ClassListAddClass(arrow, arrowClassName)
-		tn := notJS.CreateTextNode("↩")
-		notJS.AppendChild(arrow, tn)
-		notJS.SetAttributeInt(arrow, arrowTargetSubpanelIndexAttribute, i-1)
-		cb := tools.RegisterEventCallBack(
-			func(event js.Value) interface{} {
-				index := notJS.GetAttributeInt(arrow, arrowTargetSubpanelIndexAttribute)
-				fvlist.OpenSubPanel(index)
-				return nil
-			},
-			false, false, false,
-		)
-		notJS.SetOnClick(arrow, cb)
-		notJS.AppendChild(wrapper, arrow)
+		arrow = fvlist.document.NewBUTTON()
+		arrow.AddClass(arrowClassName)
+		arrow.AppendText("↩")
+		arrow.SetAttribute(arrowTargetSubpanelIndexAttribute, i-1)
+		f := func(e event.Event) interface{} {
+			index, _ := arrow.AttributeInt64(arrowTargetSubpanelIndexAttribute)
+			fvlist.OpenSubPanel(int(index))
+			return nil
+		}
+		arrow.SetEventHandler(f, "click", false)
+		wrapper.AppendChild(arrow)
 	}
 	// add the list wrapper
-	listwrapper := notJS.CreateElementDIV()
-	notJS.ClassListAddClass(listwrapper, listWrapperClassName)
-	notJS.AppendChild(wrapper, listwrapper)
+	listwrapper := fvlist.document.NewDIV()
+	listwrapper.AddClass(listWrapperClassName)
+	wrapper.AppendChild(listwrapper)
 	// title
-	title := notJS.CreateElementH4() // span
-	notJS.ClassListAddClass(title, titleClassName)
-	notJS.AppendChild(listwrapper, title)
+	title := fvlist.document.NewH4() // span
+	title.AddClass(titleClassName)
+	listwrapper.AppendChild(title)
 	// list
-	list := notJS.CreateElementDIV()
-	notJS.ClassListAddClass(list, listClassName)
-	notJS.AppendChild(listwrapper, list)
+	list := fvlist.document.NewDIV()
+	list.AddClass(listClassName)
+	listwrapper.AppendChild(list)
 	// add the whole filter wrapper
-	notJS.AppendChild(fvlist.div, wrapper)
+	fvlist.div.AppendChild(wrapper)
 	// vlist
 	vlist := NewVList(list,
 		fvlist.IDState|uint64(i),
@@ -295,8 +283,7 @@ func (fvlist *FVList) addList(
 		needToInitializeFunc,
 		needToPrependFunc,
 		needToAppendFunc,
-		notJS,
-		tools,
+		fvlist.document,
 	)
 	panel := &FVListPanel{
 		Panel:       wrapper,

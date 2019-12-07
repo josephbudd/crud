@@ -3,8 +3,7 @@
 package addpanel
 
 import (
-	"syscall/js"
-
+	"github.com/josephbudd/crud/rendererprocess/markup"
 	"github.com/pkg/errors"
 )
 
@@ -24,17 +23,23 @@ type panelPresenter struct {
 
 	// Declare your panelPresenter members here.
 
+	// example:
+
+	import "github.com/josephbudd/crud/rendererprocess/markup"
+
+	editCustomerName *markup.Element
+
 	*/
 
-	contactAddName     js.Value
-	contactAddAddress1 js.Value
-	contactAddAddress2 js.Value
-	contactAddCity     js.Value
-	contactAddState    js.Value
-	contactAddZip      js.Value
-	contactAddPhone    js.Value
-	contactAddEmail    js.Value
-	contactAddSocial   js.Value
+	contactAddName     *markup.Element
+	contactAddAddress1 *markup.Element
+	contactAddAddress2 *markup.Element
+	contactAddCity     *markup.Element
+	contactAddState    *markup.Element
+	contactAddZip      *markup.Element
+	contactAddPhone    *markup.Element
+	contactAddEmail    *markup.Element
+	contactAddSocial   *markup.Element
 }
 
 // defineMembers defines the panelPresenter members by their html elements.
@@ -51,41 +56,49 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	// Define your panelPresenter members.
 
+	// example:
+
+	// Define the edit form's customer name input field.
+	if presenter.editCustomerName = document.ElementByID("editCustomerName"); presenter.editCustomerName == nil {
+		err = errors.New("unable to find #editCustomerName")
+		return
+	}
+
 	*/
 
-	if presenter.contactAddName = notJS.GetElementByID("contactAddName"); presenter.contactAddName == null {
+	if presenter.contactAddName = document.ElementByID("contactAddName"); presenter.contactAddName == nil {
 		err = errors.New("unable to find #contactAddName")
 		return
 	}
-	if presenter.contactAddAddress1 = notJS.GetElementByID("contactAddAddress1"); presenter.contactAddAddress1 == null {
+	if presenter.contactAddAddress1 = document.ElementByID("contactAddAddress1"); presenter.contactAddAddress1 == nil {
 		err = errors.New("unable to find #contactAddAddress1")
 		return
 	}
-	if presenter.contactAddAddress2 = notJS.GetElementByID("contactAddAddress2"); presenter.contactAddAddress2 == null {
+	if presenter.contactAddAddress2 = document.ElementByID("contactAddAddress2"); presenter.contactAddAddress2 == nil {
 		err = errors.New("unable to find #contactAddAddress2")
 		return
 	}
-	if presenter.contactAddCity = notJS.GetElementByID("contactAddCity"); presenter.contactAddCity == null {
+	if presenter.contactAddCity = document.ElementByID("contactAddCity"); presenter.contactAddCity == nil {
 		err = errors.New("unable to find #contactAddCity")
 		return
 	}
-	if presenter.contactAddState = notJS.GetElementByID("contactAddState"); presenter.contactAddState == null {
+	if presenter.contactAddState = document.ElementByID("contactAddState"); presenter.contactAddState == nil {
 		err = errors.New("unable to find #contactAddState")
 		return
 	}
-	if presenter.contactAddZip = notJS.GetElementByID("contactAddZip"); presenter.contactAddZip == null {
+	if presenter.contactAddZip = document.ElementByID("contactAddZip"); presenter.contactAddZip == nil {
 		err = errors.New("unable to find #contactAddZip")
 		return
 	}
-	if presenter.contactAddPhone = notJS.GetElementByID("contactAddPhone"); presenter.contactAddPhone == null {
+	if presenter.contactAddPhone = document.ElementByID("contactAddPhone"); presenter.contactAddPhone == nil {
 		err = errors.New("unable to find #contactAddPhone")
 		return
 	}
-	if presenter.contactAddEmail = notJS.GetElementByID("contactAddEmail"); presenter.contactAddEmail == null {
+	if presenter.contactAddEmail = document.ElementByID("contactAddEmail"); presenter.contactAddEmail == nil {
 		err = errors.New("unable to find #contactAddEmail")
 		return
 	}
-	if presenter.contactAddSocial = notJS.GetElementByID("contactAddSocial"); presenter.contactAddSocial == null {
+	if presenter.contactAddSocial = document.ElementByID("contactAddSocial"); presenter.contactAddSocial == nil {
 		err = errors.New("unable to find #contactAddSocial")
 		return
 	}
@@ -97,16 +110,23 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 // Define your panelPresenter functions.
 
+// example:
+
+// displayCustomer displays the customer in the edit customer form panel.
+func (presenter *panelPresenter) displayCustomer(record *types.CustomerRecord) {
+	presenter.editCustomerName.SetValue(record.Name)
+}
+
 */
 
 func (presenter *panelPresenter) clearForm() {
-	notJS.ClearValue(presenter.contactAddName)
-	notJS.ClearValue(presenter.contactAddAddress1)
-	notJS.ClearValue(presenter.contactAddAddress2)
-	notJS.ClearValue(presenter.contactAddCity)
-	notJS.ClearValue(presenter.contactAddState)
-	notJS.ClearValue(presenter.contactAddZip)
-	notJS.ClearValue(presenter.contactAddPhone)
-	notJS.ClearValue(presenter.contactAddEmail)
-	notJS.ClearValue(presenter.contactAddSocial)
+	presenter.contactAddName.ClearValue()
+	presenter.contactAddAddress1.ClearValue()
+	presenter.contactAddAddress2.ClearValue()
+	presenter.contactAddCity.ClearValue()
+	presenter.contactAddState.ClearValue()
+	presenter.contactAddZip.ClearValue()
+	presenter.contactAddPhone.ClearValue()
+	presenter.contactAddEmail.ClearValue()
+	presenter.contactAddSocial.ClearValue()
 }

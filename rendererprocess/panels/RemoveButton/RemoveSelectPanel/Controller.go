@@ -4,13 +4,12 @@ package removeselectpanel
 
 import (
 	"fmt"
-	"syscall/js"
-
-	"github.com/pkg/errors"
 
 	"github.com/josephbudd/crud/domain/store/record"
+	"github.com/josephbudd/crud/rendererprocess/event"
 	"github.com/josephbudd/crud/rendererprocess/kickwasmwidgets"
-	"github.com/josephbudd/crud/rendererprocess/viewtools"
+	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/pkg/errors"
 )
 
 /*
@@ -24,15 +23,22 @@ type panelController struct {
 	group     *panelGroup
 	presenter *panelPresenter
 	messenger *panelMessenger
-	eventCh   chan viewtools.Event
 
 	/* NOTE TO DEVELOPER. Step 1 of 4.
 
 	// Declare your panelController fields.
 
+	// example:
+
+	import "syscall/js"
+	import "github.com/josephbudd/crud/rendererprocess/markup"
+
+	addCustomerName   *markup.Element
+	addCustomerSubmit *markup.Element
+
 	*/
 
-	removeSelectWidgetWrapper js.Value
+	removeSelectWidgetWrapper *markup.Element
 	vlist                     *kickwasmwidgets.VList
 	sortedIndexAttributeName  string
 	recordIDAttributeName     string
@@ -53,10 +59,26 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 	// Define each controller in the GUI by it's html element.
 	// Handle each controller's events.
 
+	// example:
+
+	// Define the customer name text input GUI controller.
+	if controller.addCustomerName = document.ElementByID("addCustomerName"); controller.addCustomerName == nil {
+		err = errors.New("unable to find #addCustomerName")
+		return
+	}
+
+	// Define the submit button GUI controller.
+	if controller.addCustomerSubmit = document.ElementByID("addCustomerSubmit"); controller.addCustomerSubmit == nil {
+		err = errors.New("unable to find #addCustomerSubmit")
+		return
+	}
+	// Handle the submit button's onclick event.
+	controller.addCustomerSubmit.SetEventHandler(controller.handleSubmit, "click", false)
+
 	*/
 
 	// Define the vlist wrapper div and set it's handler.
-	if controller.removeSelectWidgetWrapper = notJS.GetElementByID("removeSelectWidgetWrapper"); controller.removeSelectWidgetWrapper == null {
+	if controller.removeSelectWidgetWrapper = document.ElementByID("removeSelectWidgetWrapper"); controller.removeSelectWidgetWrapper == nil {
 		err = errors.New("unable to find #removeSelectWidgetWrapper")
 		return
 	}
@@ -80,14 +102,14 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 		func(count, state uint64) {
 			controller.messenger.getRemoveSelectContactsPage(0, count, state)
 		},
-		// needToPrependFunc func(button js.Value, count, state uint64)
+		// needToPrependFunc func(button *markup.Element, count, state uint64)
 		// Param button is the current first button.
 		// Param count is the number of buttons that the selector needs.
 		// Param state is the selector's ID OR'd with it's current behavior ( prepending ).
-		func(button js.Value, count, state uint64) {
+		func(button *markup.Element, count, state uint64) {
 			// Remember. Each button is a contact record.
 			// Find the records that will preceed the current button's record.
-			buttonIndex := notJS.GetAttributeUint64(button, sortedIndexAttributeName)
+			buttonIndex, _ := button.AttributeUint64(sortedIndexAttributeName)
 			startIndex := buttonIndex - count
 			if startIndex < 0 {
 				startIndex = 0
@@ -95,16 +117,15 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 			actualCount := 1 + (buttonIndex - startIndex)
 			controller.messenger.getRemoveSelectContactsPage(startIndex, actualCount, state)
 		},
-		// needToAppendFunc func(button js.Value, count, state uint64)
+		// needToAppendFunc func(button *markup.Element, count, state uint64)
 		// Param button is the current last button.
 		// Param count is the number of buttons that the selector needs.
 		// Param state is the selector's ID OR'd with it's current behavior ( appending ).
-		func(button js.Value, count, state uint64) {
-			buttonIndex := notJS.GetAttributeUint64(button, sortedIndexAttributeName)
+		func(button *markup.Element, count, state uint64) {
+			buttonIndex, _ := button.AttributeUint64(sortedIndexAttributeName)
 			controller.messenger.getRemoveSelectContactsPage(buttonIndex, count, state)
 		},
-		notJS,
-		tools,
+		document,
 	)
 
 	return
@@ -113,6 +134,36 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 /* NOTE TO DEVELOPER. Step 3 of 4.
 
 // Handlers and other functions.
+
+// example:
+
+import "github.com/josephbudd/crud/domain/store/record"
+import "github.com/josephbudd/crud/rendererprocess/event"
+import "github.com/josephbudd/crud/rendererprocess/display"
+
+func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
+	// See renderer/event/event.go.
+	// The event.Event funcs.
+	//   e.PreventDefaultBehavior()
+	//   e.StopCurrentPhasePropagation()
+	//   e.StopAllPhasePropagation()
+	//   target := e.JSTarget
+	//   event := e.JSEvent
+	// You must use the javascript event e.JSEvent, as a js.Value.
+	// However, you can use the target as a *markup.Element
+	//   target := document.NewElementFromJSValue(e.JSTarget)
+
+	name := strings.TrimSpace(controller.addCustomerName.Value())
+	if len(name) == 0 {
+		display.Error("Customer Name is required.")
+		return
+	}
+	r := &record.Customer{
+		Name: name,
+	}
+	controller.messenger.AddCustomer(r)
+	return
+}
 
 */
 
@@ -124,69 +175,55 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 //   which calls the messenger's getContact func so that a contact record can be confirmed or canceld for removal.
 func (controller *panelController) buildButtons(rr []*record.Contact, startSortedIndex, totalRecordCount, state uint64) {
 	// convert the records into HTML buttons for the vlist
-	buttons := make([]js.Value, len(rr))
+	buttons := make([]*markup.Element, len(rr))
 	for i, r := range rr {
-		button := notJS.CreateElementBUTTON()
+		button := document.NewBUTTON()
 		// Button attributes.
 		// Sorted index is needed for prepending and appending more buttons to the vlist.
-		notJS.SetAttributeUint64(button, sortedIndexAttributeName, startSortedIndex+uint64(i))
+		button.SetAttribute(sortedIndexAttributeName, startSortedIndex+uint64(i))
 		// Record id needed when the user selects the record to remove ( onclick ).
-		notJS.SetAttributeUint64(button, recordIDAttributeName, r.ID)
+		button.SetAttribute(recordIDAttributeName, r.ID)
 		// Button onclick
-		cb := tools.RegisterEventCallBack(
-			func(event js.Value) (nilReturn interface{}) {
-				// the user has clicked on a button
-				target := notJS.GetEventTarget(event)
-				for {
-					if notJS.TagName(target) == "BUTTON" {
-						break
-					}
-					target = notJS.ParentNode(target)
+		f := func(e event.Event) (nilReturn interface{}) {
+			// the user has clicked on a button
+			target := document.NewElementFromJSValue(e.JSTarget)
+			for {
+				if target.TagName() == "BUTTON" {
+					break
 				}
-				id := notJS.GetAttributeUint64(target, recordIDAttributeName)
-				controller.messenger.getContact(id)
-				return
-			},
-			true, true, true,
-		)
-		notJS.SetOnClick(button, cb)
+				target = target.Parent()
+			}
+			id, _ := target.AttributeUint64(recordIDAttributeName)
+			controller.messenger.getContact(id)
+			return
+		}
+		button.SetEventHandler(f, "click", false)
 		// Button label.
 		// Name
-		h4 := notJS.CreateElementH4()
-		tn := notJS.CreateTextNode(r.Name)
-		notJS.AppendChild(h4, tn)
-		notJS.AppendChild(button, h4)
+		h4 := document.NewH4()
+		h4.SetInnerText(r.Name)
+		button.AppendChild(h4)
 		// Address 1 & 2
-		p := notJS.CreateElementP()
-		tn = notJS.CreateTextNode(r.Address1)
-		notJS.AppendChild(p, tn)
-		br := notJS.CreateElementBR()
+		p := document.NewP()
+		p.AppendText(r.Address1)
+		p.AppendChild(document.NewBR())
 		if len(r.Address2) > 0 {
-			notJS.AppendChild(p, br)
-			tn = notJS.CreateTextNode(r.Address2)
-			notJS.AppendChild(p, tn)
+			p.AppendChild(document.NewBR())
+			p.AppendText(r.Address2)
 		}
 		// City, state zip.
-		br = notJS.CreateElementBR()
-		notJS.AppendChild(p, br)
-		tn = notJS.CreateTextNode(fmt.Sprintf("%s, %s %s", r.City, r.State, r.Zip))
-		notJS.AppendChild(p, tn)
-		notJS.AppendChild(button, p)
+		p.AppendChild(document.NewBR())
+		p.AppendText(fmt.Sprintf("%s, %s %s", r.City, r.State, r.Zip))
+		button.AppendChild(p)
 		// Email, phone, social.
-		p = notJS.CreateElementP()
-		br = notJS.CreateElementBR()
-		notJS.AppendChild(p, br)
-		tn = notJS.CreateTextNode(r.Email)
-		notJS.AppendChild(p, tn)
-		br = notJS.CreateElementBR()
-		notJS.AppendChild(p, br)
-		tn = notJS.CreateTextNode(r.Phone)
-		notJS.AppendChild(p, tn)
-		br = notJS.CreateElementBR()
-		notJS.AppendChild(p, br)
-		tn = notJS.CreateTextNode(r.Social)
-		notJS.AppendChild(p, tn)
-		notJS.AppendChild(button, p)
+		p = document.NewP()
+		p.AppendChild(document.NewBR())
+		p.AppendText(r.Email)
+		p.AppendChild(document.NewBR())
+		p.AppendText(r.Phone)
+		p.AppendChild(document.NewBR())
+		p.AppendText(r.Social)
+		button.AppendChild(p)
 		buttons[i] = button
 	}
 	controller.vlist.Build(buttons, state, totalRecordCount)
@@ -200,6 +237,10 @@ func (controller *panelController) initialCalls() {
 
 	// Make the initial calls.
 	// I use this to start up widgets. For example a virtual list widget.
+
+	// example:
+
+	controller.customerSelectWidget.start()
 
 	*/
 

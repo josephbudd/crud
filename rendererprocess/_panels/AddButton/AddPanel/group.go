@@ -6,6 +6,9 @@ import (
 	"syscall/js"
 
 	"github.com/pkg/errors"
+
+	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/josephbudd/crud/rendererprocess/framework/viewtools"
 )
 
 /*
@@ -30,10 +33,12 @@ func (group *panelGroup) defineMembers() (err error) {
 		}
 	}()
 
-	if group.addPanel = notJS.GetElementByID("tabsMasterView-home-pad-AddButton-AddPanel"); group.addPanel == null {
-		err = errors.New("unable to find #tabsMasterView-home-pad-AddButton-AddPanel")
+    var panel *markup.Element
+ if panel = document.ElementByID("mainMasterView-home-pad-AddButton-AddPanel"); panel == nil {
+		err = errors.New("unable to find #mainMasterView-home-pad-AddButton-AddPanel")
 		return
-	}
+    }
+    group.addPanel = panel.JSValue()
 
 	return
 }
@@ -45,7 +50,7 @@ func (group *panelGroup) defineMembers() (err error) {
 */
 
 // showAddPanel shows the panel you named AddPanel while hiding any other panels in this panel group.
-// This panel's id is tabsMasterView-home-pad-AddButton-AddPanel.
+// This panel's id is mainMasterView-home-pad-AddButton-AddPanel.
 // This panel either becomes visible immediately or whenever this group of panels is made visible.  Whenever could be immediately if this panel group is currently visible.
 // Param force boolean effects when this panel becomes visible.
 //  * if force is true then
@@ -73,5 +78,5 @@ LPC:
 
 */
 func (group *panelGroup) showAddPanel(force bool) {
-	tools.ShowPanelInButtonGroup(group.addPanel, force)
+	viewtools.ShowPanelInButtonGroup(group.addPanel, force)
 }

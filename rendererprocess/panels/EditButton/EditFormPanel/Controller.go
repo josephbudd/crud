@@ -3,12 +3,11 @@
 package editformpanel
 
 import (
-	"syscall/js"
-
-	"github.com/pkg/errors"
-
 	"github.com/josephbudd/crud/domain/store/record"
-	"github.com/josephbudd/crud/rendererprocess/viewtools"
+	"github.com/josephbudd/crud/rendererprocess/display"
+	"github.com/josephbudd/crud/rendererprocess/event"
+	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/pkg/errors"
 )
 
 /*
@@ -22,25 +21,32 @@ type panelController struct {
 	group     *panelGroup
 	presenter *panelPresenter
 	messenger *panelMessenger
-	eventCh   chan viewtools.Event
 
 	/* NOTE TO DEVELOPER. Step 1 of 4.
 
 	// Declare your panelController fields.
 
+	// example:
+
+	import "syscall/js"
+	import "github.com/josephbudd/crud/rendererprocess/markup"
+
+	addCustomerName   *markup.Element
+	addCustomerSubmit *markup.Element
+
 	*/
 
-	contactEditName     js.Value
-	contactEditAddress1 js.Value
-	contactEditAddress2 js.Value
-	contactEditCity     js.Value
-	contactEditState    js.Value
-	contactEditZip      js.Value
-	contactEditPhone    js.Value
-	contactEditEmail    js.Value
-	contactEditSocial   js.Value
-	contactEditSubmit   js.Value
-	contactEditCancel   js.Value
+	contactEditName     *markup.Element
+	contactEditAddress1 *markup.Element
+	contactEditAddress2 *markup.Element
+	contactEditCity     *markup.Element
+	contactEditState    *markup.Element
+	contactEditZip      *markup.Element
+	contactEditPhone    *markup.Element
+	contactEditEmail    *markup.Element
+	contactEditSocial   *markup.Element
+	contactEditSubmit   *markup.Element
+	contactEditCancel   *markup.Element
 
 	contact *record.Contact
 }
@@ -60,58 +66,74 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 	// Define each controller in the GUI by it's html element.
 	// Handle each controller's events.
 
+	// example:
+
+	// Define the customer name text input GUI controller.
+	if controller.addCustomerName = document.ElementByID("addCustomerName"); controller.addCustomerName == nil {
+		err = errors.New("unable to find #addCustomerName")
+		return
+	}
+
+	// Define the submit button GUI controller.
+	if controller.addCustomerSubmit = document.ElementByID("addCustomerSubmit"); controller.addCustomerSubmit == nil {
+		err = errors.New("unable to find #addCustomerSubmit")
+		return
+	}
+	// Handle the submit button's onclick event.
+	controller.addCustomerSubmit.SetEventHandler(controller.handleSubmit, "click", false)
+
 	*/
 
-	if controller.contactEditName = notJS.GetElementByID("contactEditName"); controller.contactEditName == null {
+	if controller.contactEditName = document.ElementByID("contactEditName"); controller.contactEditName == nil {
 		err = errors.New("unable to find #contactEditName")
 		return
 	}
-	if controller.contactEditAddress1 = notJS.GetElementByID("contactEditAddress1"); controller.contactEditAddress1 == null {
+	if controller.contactEditAddress1 = document.ElementByID("contactEditAddress1"); controller.contactEditAddress1 == nil {
 		err = errors.New("unable to find #contactEditAddress1")
 		return
 	}
-	if controller.contactEditAddress2 = notJS.GetElementByID("contactEditAddress2"); controller.contactEditAddress2 == null {
+	if controller.contactEditAddress2 = document.ElementByID("contactEditAddress2"); controller.contactEditAddress2 == nil {
 		err = errors.New("unable to find #contactEditAddress2")
 		return
 	}
-	if controller.contactEditCity = notJS.GetElementByID("contactEditCity"); controller.contactEditCity == null {
+	if controller.contactEditCity = document.ElementByID("contactEditCity"); controller.contactEditCity == nil {
 		err = errors.New("unable to find #contactEditCity")
 		return
 	}
-	if controller.contactEditState = notJS.GetElementByID("contactEditState"); controller.contactEditState == null {
+	if controller.contactEditState = document.ElementByID("contactEditState"); controller.contactEditState == nil {
 		err = errors.New("unable to find #contactEditState")
 		return
 	}
-	if controller.contactEditZip = notJS.GetElementByID("contactEditZip"); controller.contactEditZip == null {
+	if controller.contactEditZip = document.ElementByID("contactEditZip"); controller.contactEditZip == nil {
 		err = errors.New("unable to find #contactEditZip")
 		return
 	}
-	if controller.contactEditPhone = notJS.GetElementByID("contactEditPhone"); controller.contactEditPhone == null {
+	if controller.contactEditPhone = document.ElementByID("contactEditPhone"); controller.contactEditPhone == nil {
 		err = errors.New("unable to find #contactEditPhone")
 		return
 	}
-	if controller.contactEditEmail = notJS.GetElementByID("contactEditEmail"); controller.contactEditEmail == null {
+	if controller.contactEditEmail = document.ElementByID("contactEditEmail"); controller.contactEditEmail == nil {
 		err = errors.New("unable to find #contactEditEmail")
 		return
 	}
-	if controller.contactEditSocial = notJS.GetElementByID("contactEditSocial"); controller.contactEditSocial == null {
+	if controller.contactEditSocial = document.ElementByID("contactEditSocial"); controller.contactEditSocial == nil {
 		err = errors.New("unable to find #contactEditSocial")
 		return
 	}
 
-	if controller.contactEditSubmit = notJS.GetElementByID("contactEditSubmit"); controller.contactEditSubmit == null {
+	if controller.contactEditSubmit = document.ElementByID("contactEditSubmit"); controller.contactEditSubmit == nil {
 		err = errors.New("unable to find #contactEditSubmit")
 		return
 	}
-	// Handle the submit button's onclick event.
-	tools.AddEventHandler(controller.handleSubmit, controller.contactEditSubmit, "click", false)
+	// Handle the edit button's onclick event.
+	controller.contactEditSubmit.SetEventHandler(controller.handleSubmit, "click", false)
 
-	if controller.contactEditCancel = notJS.GetElementByID("contactEditCancel"); controller.contactEditCancel == null {
+	if controller.contactEditCancel = document.ElementByID("contactEditCancel"); controller.contactEditCancel == nil {
 		err = errors.New("unable to find #contactEditCancel")
 		return
 	}
-	// Handle the submit button's onclick event.
-	tools.AddEventHandler(controller.handleCancel, controller.contactEditCancel, "click", false)
+	// Handle the cancel button's onclick event.
+	controller.contactEditCancel.SetEventHandler(controller.handleCancel, "click", false)
 
 	return
 }
@@ -120,39 +142,69 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 
 // Handlers and other functions.
 
+// example:
+
+import "github.com/josephbudd/crud/domain/store/record"
+import "github.com/josephbudd/crud/rendererprocess/event"
+import "github.com/josephbudd/crud/rendererprocess/display"
+
+func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
+	// See renderer/event/event.go.
+	// The event.Event funcs.
+	//   e.PreventDefaultBehavior()
+	//   e.StopCurrentPhasePropagation()
+	//   e.StopAllPhasePropagation()
+	//   target := e.JSTarget
+	//   event := e.JSEvent
+	// You must use the javascript event e.JSEvent, as a js.Value.
+	// However, you can use the target as a *markup.Element
+	//   target := document.NewElementFromJSValue(e.JSTarget)
+
+	name := strings.TrimSpace(controller.addCustomerName.Value())
+	if len(name) == 0 {
+		display.Error("Customer Name is required.")
+		return
+	}
+	r := &record.Customer{
+		Name: name,
+	}
+	controller.messenger.AddCustomer(r)
+	return
+}
+
 */
 
-func (controller *panelController) handleSubmit(e viewtools.Event) (nilReturn interface{}) {
+func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
 	r := controller.getRecord()
 	if len(r.Name) == 0 {
-		tools.Error("Name is required.")
+		display.Error("Name is required.")
 		return
 	}
 	if len(r.Address1) == 0 {
-		tools.Error("Address1 is required.")
+		display.Error("Address1 is required.")
 		return
 	}
 	if len(r.City) == 0 {
-		tools.Error("City is required.")
+		display.Error("City is required.")
 		return
 	}
 	if len(r.State) == 0 {
-		tools.Error("State is required.")
+		display.Error("State is required.")
 		return
 	}
 	if len(r.Zip) == 0 {
-		tools.Error("Zip is required.")
+		display.Error("Zip is required.")
 		return
 	}
 	if len(r.Email) == 0 && len(r.Phone) == 0 {
-		tools.Error("Either Email or Phone is required.")
+		display.Error("Either Email or Phone is required.")
 		return
 	}
 	controller.messenger.editContact(r)
 	return
 }
 
-func (controller *panelController) handleCancel(e viewtools.Event) (nilReturn interface{}) {
+func (controller *panelController) handleCancel(e event.Event) (nilReturn interface{}) {
 	controller.presenter.clearForm()
 	// Go back to the EditSelectPanel
 	controller.group.showEditSelectPanel(false)
@@ -168,15 +220,15 @@ func (controller *panelController) handleGetContact(r *record.Contact) {
 func (controller *panelController) getRecord() (r *record.Contact) {
 	r = &record.Contact{
 		ID:       controller.contact.ID,
-		Name:     notJS.GetValue(controller.contactEditName),
-		Address1: notJS.GetValue(controller.contactEditAddress1),
-		Address2: notJS.GetValue(controller.contactEditAddress2),
-		City:     notJS.GetValue(controller.contactEditCity),
-		State:    notJS.GetValue(controller.contactEditState),
-		Zip:      notJS.GetValue(controller.contactEditZip),
-		Phone:    notJS.GetValue(controller.contactEditPhone),
-		Email:    notJS.GetValue(controller.contactEditEmail),
-		Social:   notJS.GetValue(controller.contactEditSocial),
+		Name:     controller.contactEditName.Value(),
+		Address1: controller.contactEditAddress1.Value(),
+		Address2: controller.contactEditAddress2.Value(),
+		City:     controller.contactEditCity.Value(),
+		State:    controller.contactEditState.Value(),
+		Zip:      controller.contactEditZip.Value(),
+		Phone:    controller.contactEditPhone.Value(),
+		Email:    controller.contactEditEmail.Value(),
+		Social:   controller.contactEditSocial.Value(),
 	}
 	return
 }
@@ -188,6 +240,10 @@ func (controller *panelController) initialCalls() {
 
 	// Make the initial calls.
 	// I use this to start up widgets. For example a virtual list widget.
+
+	// example:
+
+	controller.customerSelectWidget.start()
 
 	*/
 }

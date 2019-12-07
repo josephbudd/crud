@@ -26,7 +26,7 @@ const (
 )
 
 // homeEmptyInsidePanelNamePathMap maps each markup panel template name to it's file path.
-var homeEmptyInsidePanelNamePathMap = map[string]map[string][]string{"AddButton": map[string][]string{"AddPanel": []string{"AddButton"}}, "EditButton": map[string][]string{"EditFormPanel": []string{"EditButton"}, "EditNotReadyPanel": []string{"EditButton"}, "EditSelectPanel": []string{"EditButton"}}, "RemoveButton": map[string][]string{"RemoveFormPanel": []string{"RemoveButton"}, "RemoveNotReadyPanel": []string{"RemoveButton"}, "RemoveSelectPanel": []string{"RemoveButton"}}}
+var homeEmptyInsidePanelNamePathMap = map[string]map[string][]string{"AddButton": map[string][]string{"AddPanel": []string{"AddButton"}}, "EditButton": map[string][]string{"EditFormPanel": []string{"EditButton"}, "EditNotReadyPanel": []string{"EditButton"}, "EditSelectPanel": []string{"EditButton"}}, "PrintButton": map[string][]string{"PrintNotReadyPanel": []string{"PrintButton"}, "PrintPrintPanel": []string{"PrintButton"}, "PrintSelectPanel": []string{"PrintButton"}}, "RemoveButton": map[string][]string{"RemoveFormPanel": []string{"RemoveButton"}, "RemoveNotReadyPanel": []string{"RemoveButton"}, "RemoveSelectPanel": []string{"RemoveButton"}}}
 
 // serveMainHTML only serves up main.tmpl with all of the templates for your markup panels.
 func serveMainHTML(w http.ResponseWriter) {

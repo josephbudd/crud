@@ -3,9 +3,8 @@
 package removeformpanel
 
 import (
-	"syscall/js"
-
 	"github.com/josephbudd/crud/domain/store/record"
+	"github.com/josephbudd/crud/rendererprocess/markup"
 	"github.com/pkg/errors"
 )
 
@@ -25,17 +24,23 @@ type panelPresenter struct {
 
 	// Declare your panelPresenter members here.
 
+	// example:
+
+	import "github.com/josephbudd/crud/rendererprocess/markup"
+
+	editCustomerName *markup.Element
+
 	*/
 
-	contactRemoveName     js.Value
-	contactRemoveAddress1 js.Value
-	contactRemoveAddress2 js.Value
-	contactRemoveCity     js.Value
-	contactRemoveState    js.Value
-	contactRemoveZip      js.Value
-	contactRemovePhone    js.Value
-	contactRemoveEmail    js.Value
-	contactRemoveSocial   js.Value
+	contactRemoveName     *markup.Element
+	contactRemoveAddress1 *markup.Element
+	contactRemoveAddress2 *markup.Element
+	contactRemoveCity     *markup.Element
+	contactRemoveState    *markup.Element
+	contactRemoveZip      *markup.Element
+	contactRemovePhone    *markup.Element
+	contactRemoveEmail    *markup.Element
+	contactRemoveSocial   *markup.Element
 }
 
 // defineMembers defines the panelPresenter members by their html elements.
@@ -52,41 +57,49 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	// Define your panelPresenter members.
 
+	// example:
+
+	// Define the edit form's customer name input field.
+	if presenter.editCustomerName = document.ElementByID("editCustomerName"); presenter.editCustomerName == nil {
+		err = errors.New("unable to find #editCustomerName")
+		return
+	}
+
 	*/
 
-	if presenter.contactRemoveName = notJS.GetElementByID("contactRemoveName"); presenter.contactRemoveName == null {
+	if presenter.contactRemoveName = document.ElementByID("contactRemoveName"); presenter.contactRemoveName == nil {
 		err = errors.New("unable to find #contactRemoveName")
 		return
 	}
-	if presenter.contactRemoveAddress1 = notJS.GetElementByID("contactRemoveAddress1"); presenter.contactRemoveAddress1 == null {
+	if presenter.contactRemoveAddress1 = document.ElementByID("contactRemoveAddress1"); presenter.contactRemoveAddress1 == nil {
 		err = errors.New("unable to find #contactRemoveAddress1")
 		return
 	}
-	if presenter.contactRemoveAddress2 = notJS.GetElementByID("contactRemoveAddress2"); presenter.contactRemoveAddress2 == null {
+	if presenter.contactRemoveAddress2 = document.ElementByID("contactRemoveAddress2"); presenter.contactRemoveAddress2 == nil {
 		err = errors.New("unable to find #contactRemoveAddress2")
 		return
 	}
-	if presenter.contactRemoveCity = notJS.GetElementByID("contactRemoveCity"); presenter.contactRemoveCity == null {
+	if presenter.contactRemoveCity = document.ElementByID("contactRemoveCity"); presenter.contactRemoveCity == nil {
 		err = errors.New("unable to find #contactRemoveCity")
 		return
 	}
-	if presenter.contactRemoveState = notJS.GetElementByID("contactRemoveState"); presenter.contactRemoveState == null {
+	if presenter.contactRemoveState = document.ElementByID("contactRemoveState"); presenter.contactRemoveState == nil {
 		err = errors.New("unable to find #contactRemoveState")
 		return
 	}
-	if presenter.contactRemoveZip = notJS.GetElementByID("contactRemoveZip"); presenter.contactRemoveZip == null {
+	if presenter.contactRemoveZip = document.ElementByID("contactRemoveZip"); presenter.contactRemoveZip == nil {
 		err = errors.New("unable to find #contactRemoveZip")
 		return
 	}
-	if presenter.contactRemovePhone = notJS.GetElementByID("contactRemovePhone"); presenter.contactRemovePhone == null {
+	if presenter.contactRemovePhone = document.ElementByID("contactRemovePhone"); presenter.contactRemovePhone == nil {
 		err = errors.New("unable to find #contactRemovePhone")
 		return
 	}
-	if presenter.contactRemoveEmail = notJS.GetElementByID("contactRemoveEmail"); presenter.contactRemoveEmail == null {
+	if presenter.contactRemoveEmail = document.ElementByID("contactRemoveEmail"); presenter.contactRemoveEmail == nil {
 		err = errors.New("unable to find #contactRemoveEmail")
 		return
 	}
-	if presenter.contactRemoveSocial = notJS.GetElementByID("contactRemoveSocial"); presenter.contactRemoveSocial == null {
+	if presenter.contactRemoveSocial = document.ElementByID("contactRemoveSocial"); presenter.contactRemoveSocial == nil {
 		err = errors.New("unable to find #contactRemoveSocial")
 		return
 	}
@@ -98,28 +111,35 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 // Define your panelPresenter functions.
 
+// example:
+
+// displayCustomer displays the customer in the edit customer form panel.
+func (presenter *panelPresenter) displayCustomer(record *types.CustomerRecord) {
+	presenter.editCustomerName.SetValue(record.Name)
+}
+
 */
 
 func (presenter *panelPresenter) fillForm(r *record.Contact) {
-	notJS.SetInnerText(presenter.contactRemoveName, r.Name)
-	notJS.SetInnerText(presenter.contactRemoveAddress1, r.Address1)
-	notJS.SetInnerText(presenter.contactRemoveAddress2, r.Address2)
-	notJS.SetInnerText(presenter.contactRemoveCity, r.City)
-	notJS.SetInnerText(presenter.contactRemoveState, r.State)
-	notJS.SetInnerText(presenter.contactRemoveZip, r.Zip)
-	notJS.SetInnerText(presenter.contactRemovePhone, r.Phone)
-	notJS.SetInnerText(presenter.contactRemoveEmail, r.Email)
-	notJS.SetInnerText(presenter.contactRemoveSocial, r.Social)
+	presenter.contactRemoveName.SetInnerText(r.Name)
+	presenter.contactRemoveAddress1.SetInnerText(r.Address1)
+	presenter.contactRemoveAddress2.SetInnerText(r.Address2)
+	presenter.contactRemoveCity.SetInnerText(r.City)
+	presenter.contactRemoveState.SetInnerText(r.State)
+	presenter.contactRemoveZip.SetInnerText(r.Zip)
+	presenter.contactRemovePhone.SetInnerText(r.Phone)
+	presenter.contactRemoveEmail.SetInnerText(r.Email)
+	presenter.contactRemoveSocial.SetInnerText(r.Social)
 }
 
 func (presenter *panelPresenter) clearForm() {
-	notJS.SetInnerText(presenter.contactRemoveName, emptyString)
-	notJS.SetInnerText(presenter.contactRemoveAddress1, emptyString)
-	notJS.SetInnerText(presenter.contactRemoveAddress2, emptyString)
-	notJS.SetInnerText(presenter.contactRemoveCity, emptyString)
-	notJS.SetInnerText(presenter.contactRemoveState, emptyString)
-	notJS.SetInnerText(presenter.contactRemoveZip, emptyString)
-	notJS.SetInnerText(presenter.contactRemovePhone, emptyString)
-	notJS.SetInnerText(presenter.contactRemoveEmail, emptyString)
-	notJS.SetInnerText(presenter.contactRemoveSocial, emptyString)
+	presenter.contactRemoveName.SetInnerText(emptyText)
+	presenter.contactRemoveAddress1.SetInnerText(emptyText)
+	presenter.contactRemoveAddress2.SetInnerText(emptyText)
+	presenter.contactRemoveCity.SetInnerText(emptyText)
+	presenter.contactRemoveState.SetInnerText(emptyText)
+	presenter.contactRemoveZip.SetInnerText(emptyText)
+	presenter.contactRemovePhone.SetInnerText(emptyText)
+	presenter.contactRemoveEmail.SetInnerText(emptyText)
+	presenter.contactRemoveSocial.SetInnerText(emptyText)
 }

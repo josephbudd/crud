@@ -3,9 +3,8 @@
 package editformpanel
 
 import (
-	"syscall/js"
-
 	"github.com/josephbudd/crud/domain/store/record"
+	"github.com/josephbudd/crud/rendererprocess/markup"
 	"github.com/pkg/errors"
 )
 
@@ -25,17 +24,23 @@ type panelPresenter struct {
 
 	// Declare your panelPresenter members here.
 
+	// example:
+
+	import "github.com/josephbudd/crud/rendererprocess/markup"
+
+	editCustomerName *markup.Element
+
 	*/
 
-	contactEditName     js.Value
-	contactEditAddress1 js.Value
-	contactEditAddress2 js.Value
-	contactEditCity     js.Value
-	contactEditState    js.Value
-	contactEditZip      js.Value
-	contactEditPhone    js.Value
-	contactEditEmail    js.Value
-	contactEditSocial   js.Value
+	contactEditName     *markup.Element
+	contactEditAddress1 *markup.Element
+	contactEditAddress2 *markup.Element
+	contactEditCity     *markup.Element
+	contactEditState    *markup.Element
+	contactEditZip      *markup.Element
+	contactEditPhone    *markup.Element
+	contactEditEmail    *markup.Element
+	contactEditSocial   *markup.Element
 }
 
 // defineMembers defines the panelPresenter members by their html elements.
@@ -52,41 +57,49 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	// Define your panelPresenter members.
 
+	// example:
+
+	// Define the edit form's customer name input field.
+	if presenter.editCustomerName = document.ElementByID("editCustomerName"); presenter.editCustomerName == nil {
+		err = errors.New("unable to find #editCustomerName")
+		return
+	}
+
 	*/
 
-	if presenter.contactEditName = notJS.GetElementByID("contactEditName"); presenter.contactEditName == null {
+	if presenter.contactEditName = document.ElementByID("contactEditName"); presenter.contactEditName == nil {
 		err = errors.New("unable to find #contactEditName")
 		return
 	}
-	if presenter.contactEditAddress1 = notJS.GetElementByID("contactEditAddress1"); presenter.contactEditAddress1 == null {
+	if presenter.contactEditAddress1 = document.ElementByID("contactEditAddress1"); presenter.contactEditAddress1 == nil {
 		err = errors.New("unable to find #contactEditAddress1")
 		return
 	}
-	if presenter.contactEditAddress2 = notJS.GetElementByID("contactEditAddress2"); presenter.contactEditAddress2 == null {
+	if presenter.contactEditAddress2 = document.ElementByID("contactEditAddress2"); presenter.contactEditAddress2 == nil {
 		err = errors.New("unable to find #contactEditAddress2")
 		return
 	}
-	if presenter.contactEditCity = notJS.GetElementByID("contactEditCity"); presenter.contactEditCity == null {
+	if presenter.contactEditCity = document.ElementByID("contactEditCity"); presenter.contactEditCity == nil {
 		err = errors.New("unable to find #contactEditCity")
 		return
 	}
-	if presenter.contactEditState = notJS.GetElementByID("contactEditState"); presenter.contactEditState == null {
+	if presenter.contactEditState = document.ElementByID("contactEditState"); presenter.contactEditState == nil {
 		err = errors.New("unable to find #contactEditState")
 		return
 	}
-	if presenter.contactEditZip = notJS.GetElementByID("contactEditZip"); presenter.contactEditZip == null {
+	if presenter.contactEditZip = document.ElementByID("contactEditZip"); presenter.contactEditZip == nil {
 		err = errors.New("unable to find #contactEditZip")
 		return
 	}
-	if presenter.contactEditPhone = notJS.GetElementByID("contactEditPhone"); presenter.contactEditPhone == null {
+	if presenter.contactEditPhone = document.ElementByID("contactEditPhone"); presenter.contactEditPhone == nil {
 		err = errors.New("unable to find #contactEditPhone")
 		return
 	}
-	if presenter.contactEditEmail = notJS.GetElementByID("contactEditEmail"); presenter.contactEditEmail == null {
+	if presenter.contactEditEmail = document.ElementByID("contactEditEmail"); presenter.contactEditEmail == nil {
 		err = errors.New("unable to find #contactEditEmail")
 		return
 	}
-	if presenter.contactEditSocial = notJS.GetElementByID("contactEditSocial"); presenter.contactEditSocial == null {
+	if presenter.contactEditSocial = document.ElementByID("contactEditSocial"); presenter.contactEditSocial == nil {
 		err = errors.New("unable to find #contactEditSocial")
 		return
 	}
@@ -98,28 +111,35 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 // Define your panelPresenter functions.
 
+// example:
+
+// displayCustomer displays the customer in the edit customer form panel.
+func (presenter *panelPresenter) displayCustomer(record *types.CustomerRecord) {
+	presenter.editCustomerName.SetValue(record.Name)
+}
+
 */
 
 func (presenter *panelPresenter) fillForm(r *record.Contact) {
-	notJS.SetValue(presenter.contactEditName, r.Name)
-	notJS.SetValue(presenter.contactEditAddress1, r.Address1)
-	notJS.SetValue(presenter.contactEditAddress2, r.Address2)
-	notJS.SetValue(presenter.contactEditCity, r.City)
-	notJS.SetValue(presenter.contactEditState, r.State)
-	notJS.SetValue(presenter.contactEditZip, r.Zip)
-	notJS.SetValue(presenter.contactEditPhone, r.Phone)
-	notJS.SetValue(presenter.contactEditEmail, r.Email)
-	notJS.SetValue(presenter.contactEditSocial, r.Social)
+	presenter.contactEditName.SetValue(r.Name)
+	presenter.contactEditAddress1.SetValue(r.Address1)
+	presenter.contactEditAddress2.SetValue(r.Address2)
+	presenter.contactEditCity.SetValue(r.City)
+	presenter.contactEditState.SetValue(r.State)
+	presenter.contactEditZip.SetValue(r.Zip)
+	presenter.contactEditPhone.SetValue(r.Phone)
+	presenter.contactEditEmail.SetValue(r.Email)
+	presenter.contactEditSocial.SetValue(r.Social)
 }
 
 func (presenter *panelPresenter) clearForm() {
-	notJS.ClearValue(presenter.contactEditName)
-	notJS.ClearValue(presenter.contactEditAddress1)
-	notJS.ClearValue(presenter.contactEditAddress2)
-	notJS.ClearValue(presenter.contactEditCity)
-	notJS.ClearValue(presenter.contactEditState)
-	notJS.ClearValue(presenter.contactEditZip)
-	notJS.ClearValue(presenter.contactEditPhone)
-	notJS.ClearValue(presenter.contactEditEmail)
-	notJS.ClearValue(presenter.contactEditSocial)
+	presenter.contactEditName.ClearValue()
+	presenter.contactEditAddress1.ClearValue()
+	presenter.contactEditAddress2.ClearValue()
+	presenter.contactEditCity.ClearValue()
+	presenter.contactEditState.ClearValue()
+	presenter.contactEditZip.ClearValue()
+	presenter.contactEditPhone.ClearValue()
+	presenter.contactEditEmail.ClearValue()
+	presenter.contactEditSocial.ClearValue()
 }

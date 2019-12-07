@@ -4,12 +4,11 @@ package removeformpanel
 
 import (
 	"log"
-	"syscall/js"
-
-	"github.com/pkg/errors"
 
 	"github.com/josephbudd/crud/domain/store/record"
-	"github.com/josephbudd/crud/rendererprocess/viewtools"
+	"github.com/josephbudd/crud/rendererprocess/event"
+	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/pkg/errors"
 )
 
 /*
@@ -23,17 +22,24 @@ type panelController struct {
 	group     *panelGroup
 	presenter *panelPresenter
 	messenger *panelMessenger
-	eventCh   chan viewtools.Event
 
 	/* NOTE TO DEVELOPER. Step 1 of 4.
 
 	// Declare your panelController fields.
 
+	// example:
+
+	import "syscall/js"
+	import "github.com/josephbudd/crud/rendererprocess/markup"
+
+	addCustomerName   *markup.Element
+	addCustomerSubmit *markup.Element
+
 	*/
 
 	contact             *record.Contact
-	contactRemoveSubmit js.Value
-	contactRemoveCancel js.Value
+	contactRemoveSubmit *markup.Element
+	contactRemoveCancel *markup.Element
 }
 
 // defineControlsHandlers defines the GUI's controllers and their event handlers.
@@ -51,21 +57,37 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 	// Define each controller in the GUI by it's html element.
 	// Handle each controller's events.
 
+	// example:
+
+	// Define the customer name text input GUI controller.
+	if controller.addCustomerName = document.ElementByID("addCustomerName"); controller.addCustomerName == nil {
+		err = errors.New("unable to find #addCustomerName")
+		return
+	}
+
+	// Define the submit button GUI controller.
+	if controller.addCustomerSubmit = document.ElementByID("addCustomerSubmit"); controller.addCustomerSubmit == nil {
+		err = errors.New("unable to find #addCustomerSubmit")
+		return
+	}
+	// Handle the submit button's onclick event.
+	controller.addCustomerSubmit.SetEventHandler(controller.handleSubmit, "click", false)
+
 	*/
 
-	if controller.contactRemoveSubmit = notJS.GetElementByID("contactRemoveSubmit"); controller.contactRemoveSubmit == null {
+	if controller.contactRemoveSubmit = document.ElementByID("contactRemoveSubmit"); controller.contactRemoveSubmit == nil {
 		err = errors.New("unable to find #contactRemoveSubmit")
 		return
 	}
 	// Handle the submit button's onclick event.
-	tools.AddEventHandler(controller.handleSubmit, controller.contactRemoveSubmit, "click", false)
+	controller.contactRemoveSubmit.SetEventHandler(controller.handleSubmit, "click", false)
 
-	if controller.contactRemoveCancel = notJS.GetElementByID("contactRemoveCancel"); controller.contactRemoveCancel == null {
+	if controller.contactRemoveCancel = document.ElementByID("contactRemoveCancel"); controller.contactRemoveCancel == nil {
 		err = errors.New("unable to find #contactRemoveCancel")
 		return
 	}
 	// Handle the cancel button's onclick event.
-	tools.AddEventHandler(controller.handleCancel, controller.contactRemoveCancel, "click", false)
+	controller.contactRemoveCancel.SetEventHandler(controller.handleCancel, "click", false)
 
 	return
 }
@@ -74,14 +96,44 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 
 // Handlers and other functions.
 
+// example:
+
+import "github.com/josephbudd/crud/domain/store/record"
+import "github.com/josephbudd/crud/rendererprocess/event"
+import "github.com/josephbudd/crud/rendererprocess/display"
+
+func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
+	// See renderer/event/event.go.
+	// The event.Event funcs.
+	//   e.PreventDefaultBehavior()
+	//   e.StopCurrentPhasePropagation()
+	//   e.StopAllPhasePropagation()
+	//   target := e.JSTarget
+	//   event := e.JSEvent
+	// You must use the javascript event e.JSEvent, as a js.Value.
+	// However, you can use the target as a *markup.Element
+	//   target := document.NewElementFromJSValue(e.JSTarget)
+
+	name := strings.TrimSpace(controller.addCustomerName.Value())
+	if len(name) == 0 {
+		display.Error("Customer Name is required.")
+		return
+	}
+	r := &record.Customer{
+		Name: name,
+	}
+	controller.messenger.AddCustomer(r)
+	return
+}
+
 */
 
-func (controller *panelController) handleSubmit(e viewtools.Event) (nilReturn interface{}) {
+func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
 	controller.messenger.removeContact(controller.contact.ID)
 	return
 }
 
-func (controller *panelController) handleCancel(e viewtools.Event) (nilReturn interface{}) {
+func (controller *panelController) handleCancel(e event.Event) (nilReturn interface{}) {
 	controller.presenter.clearForm()
 	// Go back to the RemoveSelectPanel
 	controller.group.showRemoveSelectPanel(false)
@@ -102,6 +154,10 @@ func (controller *panelController) initialCalls() {
 
 	// Make the initial calls.
 	// I use this to start up widgets. For example a virtual list widget.
+
+	// example:
+
+	controller.customerSelectWidget.start()
 
 	*/
 }

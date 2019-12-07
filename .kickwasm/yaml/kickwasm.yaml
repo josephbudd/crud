@@ -178,3 +178,20 @@ buttons :
             <button id="contactRemoveSubmit">Remove</button>
             <button id="contactRemoveCancel">Cancel</button>
           </p>
+  - name: PrintButton
+    label: Print
+    cc: Print
+    panels:
+    - name: PrintNotReadyPanel
+      note : Static text displayed when there are no contacts in the store.
+      markup : <p>You don't have any contacts to print.</p>
+    - name: PrintSelectPanel
+      note : |
+        A select widget sorted by name.
+        The widget needs to be rebuilt anytime a contact is added, edited or removed.
+      markup : <div id="printSelectWidgetWrapper" class="VList"></div>
+    - name: PrintPrintPanel
+      note: Display a record for printing.
+      markup : |
+        <table id="printTable"></table>
+

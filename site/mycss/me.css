@@ -4,3 +4,14 @@ span.remove-form-label
     font-size: 150%;
     color: black;
 }
+
+#printTable th
+{
+    text-align: right;
+    padding: 2px 10px 2px 2px;
+}
+#printTable td
+{
+    text-align: left;
+    padding: 2px 2px 2px 10px;
+}

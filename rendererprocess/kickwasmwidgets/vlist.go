@@ -1,29 +1,27 @@
 package kickwasmwidgets
 
 import (
-	"math"
-	"syscall/js"
-
-	"github.com/josephbudd/crud/rendererprocess/notjs"
-	"github.com/josephbudd/crud/rendererprocess/viewtools"
+	"github.com/josephbudd/crud/rendererprocess/dom"
+	"github.com/josephbudd/crud/rendererprocess/event"
+	"github.com/josephbudd/crud/rendererprocess/markup"
 )
 
 // VList is vertical list of verbose buttons.
 type VList struct {
-	div                  js.Value
+	div                  *markup.Element
 	max                  uint64
 	onSizeFunc           func()
 	onNoSizeFunc         func()
 	needToInitializeFunc func(count, state uint64)
-	needToPrependFunc    func(button js.Value, count, state uint64)
-	needToAppendFunc     func(button js.Value, count, state uint64)
+	needToPrependFunc    func(button *markup.Element, count, state uint64)
+	needToAppendFunc     func(button *markup.Element, count, state uint64)
 	idState              uint64
-	notJS                *notjs.NotJS
-	tools                *viewtools.Tools
 
 	adjusting     bool
-	srcollTop     int
-	lastScrollTop int
+	srcollTop     float64
+	lastScrollTop float64
+
+	document *dom.DOM
 }
 
 // NewVList constructs a new VList.
@@ -62,16 +60,15 @@ type VList struct {
 //  is asynchronous and returns nothing
 //  it is expected to propagate a call back to vlist.Build
 // Param notJS is a pointer to notjs.NotJS
-func NewVList(div js.Value,
+func NewVList(div *markup.Element,
 	idState uint64,
 	max uint64,
 	onSizeFunc func(),
 	onNoSizeFunc func(),
 	needToInitializeFunc func(count, state uint64),
-	needToPrependFunc func(button js.Value, count, state uint64),
-	needToAppendFunc func(button js.Value, count, state uint64),
-	notJS *notjs.NotJS,
-	tools *viewtools.Tools,
+	needToPrependFunc func(button *markup.Element, count, state uint64),
+	needToAppendFunc func(button *markup.Element, count, state uint64),
+	document *dom.DOM,
 ) *VList {
 	vlist := &VList{
 		div:                  div,
@@ -82,19 +79,17 @@ func NewVList(div js.Value,
 		needToPrependFunc:    needToPrependFunc,
 		needToAppendFunc:     needToAppendFunc,
 		idState:              idState,
-		notJS:                notJS,
-		tools:                tools,
+		document:             document,
 	}
 	// setup div
-	notJS.RemoveChildNodes(div)
+	div.RemoveChildren()
 	// fix max
 	if vlist.max%2 != 0 {
 		vlist.max++
 	}
 	vlist.max /= 2
 	// setup scrolling
-	cb := tools.RegisterEventCallBack(vlist.handleOnScroll, true, true, true)
-	notJS.SetOnScroll(div, cb)
+	div.SetEventHandler(vlist.handleOnScroll, "scroll", false)
 
 	return vlist
 }
@@ -107,25 +102,25 @@ func (vlist *VList) Start() {
 
 // Hide hides the vlist.
 func (vlist *VList) Hide() {
-	vlist.tools.ElementHide(vlist.div)
+	vlist.div.Hide()
 }
 
 // Show unshides the vlist.
 func (vlist *VList) Show() {
-	vlist.tools.ElementShow(vlist.div)
+	vlist.div.Show()
 }
 
 // Toggle toggles the vlist visibility.
 func (vlist *VList) Toggle() {
-	if vlist.tools.ElementIsShown(vlist.div) {
-		vlist.tools.ElementHide(vlist.div)
+	if vlist.div.IsShown() {
+		vlist.div.Hide()
 	} else {
-		vlist.tools.ElementShow(vlist.div)
+		vlist.div.Show()
 	}
 }
 
 // Build rebuilds the vlist in some way.
-func (vlist *VList) Build(buttons []js.Value, state, recordCount uint64) {
+func (vlist *VList) Build(buttons []*markup.Element, state, recordCount uint64) {
 	vlist.adjusting = true
 	if recordCount == 0 {
 		// the user has not added any records.
@@ -162,19 +157,18 @@ func (vlist *VList) GetIDState() uint64 {
 	return vlist.idState
 }
 
-func (vlist *VList) initialize(buttons []js.Value) {
+func (vlist *VList) initialize(buttons []*markup.Element) {
 	vlist.clear()
 	vlist.append(buttons)
 }
 
-func (vlist *VList) append(buttons []js.Value) {
-	notJS := vlist.notJS
+func (vlist *VList) append(buttons []*markup.Element) {
 	l := uint64(len(buttons))
 	if l > vlist.max {
 		buttons = buttons[:vlist.max]
 	}
 	div := vlist.div
-	children := notJS.ChildrenSlice(div)
+	children := div.Children()
 	l = uint64(len(children) - 1)
 	bottom := children[l]
 	count := l - 1
@@ -182,10 +176,10 @@ func (vlist *VList) append(buttons []js.Value) {
 	rc := 1
 	// append to the back end of the list.
 	for _, button := range buttons {
-		notJS.InsertChildBefore(div, button, bottom)
+		div.InsertChildBefore(button, bottom)
 		if count == maxlen {
 			// remove the top of the list.
-			notJS.RemoveChild(div, children[rc])
+			div.RemoveChild(children[rc])
 			rc++
 		} else {
 			// total # of buttons increased.
@@ -195,26 +189,25 @@ func (vlist *VList) append(buttons []js.Value) {
 	}
 }
 
-func (vlist *VList) prepend(buttons []js.Value) {
-	notJS := vlist.notJS
+func (vlist *VList) prepend(buttons []*markup.Element) {
 	lr := uint64(len(buttons))
 	if lr > vlist.max {
 		buttons = buttons[:vlist.max]
 		lr = vlist.max
 	}
 	div := vlist.div
-	children := notJS.ChildrenSlice(div)
+	children := div.Children()
 	rc := uint64(len(children)) - 2
 	count := rc
 	maxlen := vlist.max * 2
-	scrollTop := float64(notJS.GetScrollTop(div))
+	scrollTop := div.ScrollTop()
 	// prepend to the front end of the list.
 	top := children[1]
 	for _, button := range buttons {
-		notJS.InsertChildBefore(div, button, top)
+		div.InsertChildBefore(button, top)
 		// remove the bottom of the list.
 		if count == maxlen {
-			notJS.RemoveChild(div, children[rc])
+			div.RemoveChild(children[rc])
 			rc--
 		} else {
 			// total # of buttons increased.
@@ -222,49 +215,47 @@ func (vlist *VList) prepend(buttons []js.Value) {
 		}
 	}
 	buttonHt := float64(0)
-	children = notJS.ChildrenSlice(div)
+	children = div.Children()
 	if len(children) > 2 {
-		buttonHt = notJS.OuterHeight(children[1])
+		buttonHt = children[1].OuterHeight()
 	}
 	scrollTo := scrollTop + (buttonHt * float64(lr))
 	to := scrollTop + scrollTo
-	vlist.notJS.ScrollTo(div, 0, int(math.Floor(to)))
+	div.ScrollTo(0.0, to)
 }
 
 func (vlist *VList) clear() {
-	notJS := vlist.notJS
 	div := vlist.div
-	notJS.RemoveChildNodes(div)
-	p := notJS.CreateElement("p")
-	notJS.AppendChild(div, p)
-	p = notJS.CreateElement("p")
-	notJS.AppendChild(div, p)
+	div.RemoveChildren()
+	p := vlist.document.NewP()
+	div.AppendChild(p)
+	p = vlist.document.NewP()
+	div.AppendChild(p)
 }
 
-func (vlist *VList) handleOnScroll(event js.Value) (nilreturn interface{}) {
+func (vlist *VList) handleOnScroll(e event.Event) (nilreturn interface{}) {
 	if vlist.adjusting {
 		vlist.adjusting = false
 		return
 	}
-	notJS := vlist.notJS
-	div := notJS.GetEventTarget(event)
+	div := vlist.document.NewElementFromJSValue(e.JSTarget)
 	lastScrollTop := float64(vlist.lastScrollTop)
-	vlist.lastScrollTop = notJS.GetScrollTop(div)
+	vlist.lastScrollTop = div.ScrollTop()
 	scrollTop := float64(vlist.lastScrollTop)
-	children := notJS.ChildrenSlice(div)
+	children := div.Children()
 	l := len(children)
 	bottom := float64(0)
 	paddingHt := float64(0)
 	if l >= 2 {
 		// the first and last children are the p which are the padding.
-		paddingHt = notJS.OuterHeight(children[0])
+		paddingHt = children[0].OuterHeight()
 		bottom += paddingHt * 2.0
 	}
 	if l > 2 {
 		// there is more then just padding
-		bottom += notJS.OuterHeight(children[1]) * float64(l-2)
+		bottom += children[1].OuterHeight() * float64(l-2)
 	}
-	bottom -= notJS.InnerHeight(div)
+	bottom -= div.InnerHeight()
 	if scrollTop < lastScrollTop {
 		// scrolling up
 		if scrollTop > paddingHt {

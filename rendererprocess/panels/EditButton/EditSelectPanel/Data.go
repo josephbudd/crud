@@ -3,7 +3,7 @@
 package editselectpanel
 
 import (
-	"github.com/josephbudd/crud/rendererprocess/dom"
+	"github.com/josephbudd/crud/rendererprocess/api/dom"
 	"github.com/josephbudd/crud/rendererprocess/framework/lpc"
 )
 

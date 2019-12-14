@@ -38,7 +38,7 @@ type panelMessenger struct {
 
 import "github.com/josephbudd/crud/domain/store/record"
 import "github.com/josephbudd/crud/domain/lpc/message"
-import "github.com/josephbudd/crud/rendererprocess/display"
+import "github.com/josephbudd/crud/rendererprocess/api/display"
 
 // Add Customer.
 

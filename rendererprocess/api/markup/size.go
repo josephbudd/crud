@@ -3,7 +3,7 @@
 package markup
 
 import (
-	"github.com/josephbudd/crud/rendererprocess/window"
+	"github.com/josephbudd/crud/rendererprocess/api/window"
 )
 
 // InnerWidth returns the innermost width.

@@ -3,7 +3,7 @@
 package addpanel
 
 import (
-	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/josephbudd/crud/rendererprocess/api/markup"
 	"github.com/pkg/errors"
 )
 
@@ -25,7 +25,7 @@ type panelPresenter struct {
 
 	// example:
 
-	import "github.com/josephbudd/crud/rendererprocess/markup"
+	import "github.com/josephbudd/crud/rendererprocess/api/markup"
 
 	editCustomerName *markup.Element
 

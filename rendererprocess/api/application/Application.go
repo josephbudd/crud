@@ -3,8 +3,8 @@
 package application
 
 import (
-	"github.com/josephbudd/crud/rendererprocess/display"
-	"github.com/josephbudd/crud/rendererprocess/event"
+	"github.com/josephbudd/crud/rendererprocess/api/display"
+	"github.com/josephbudd/crud/rendererprocess/api/event"
 	"github.com/josephbudd/crud/rendererprocess/framework/callback"
 )
 

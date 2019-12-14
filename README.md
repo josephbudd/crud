@@ -1,8 +1,8 @@
-## December 07, 2019
+## January 1, 2020
 
 This CRUD was originally built to test kickwasm version 5.0.0 and it's tools.
 
-This current version was built to test kickwasm version 13.0.0 and it's tools. The CRUD WIKI has been updated to this version of the CRUD.
+This current version was built to test kickwasm version 14.0.0 and it's tools. The CRUD WIKI has been updated to this version of the CRUD.
 
 Read the CRUD WIKI to learn how kickwasm and it's tools are used.
 

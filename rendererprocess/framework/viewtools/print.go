@@ -5,8 +5,8 @@ package viewtools
 import (
 	"syscall/js"
 
-	"github.com/josephbudd/crud/rendererprocess/event"
-	"github.com/josephbudd/crud/rendererprocess/window"
+	"github.com/josephbudd/crud/rendererprocess/api/event"
+	"github.com/josephbudd/crud/rendererprocess/api/window"
 )
 
 // SetPrintTitle sets the document title for printing.

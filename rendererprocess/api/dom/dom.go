@@ -5,7 +5,7 @@ package dom
 import (
 	"syscall/js"
 
-	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/josephbudd/crud/rendererprocess/api/markup"
 )
 
 var (

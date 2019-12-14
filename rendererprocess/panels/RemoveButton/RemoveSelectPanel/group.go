@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/josephbudd/crud/rendererprocess/api/markup"
 	"github.com/josephbudd/crud/rendererprocess/framework/viewtools"
 )
 

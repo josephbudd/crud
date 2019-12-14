@@ -5,7 +5,7 @@ package viewtools
 import (
 	"fmt"
 
-	"github.com/josephbudd/crud/rendererprocess/event"
+	"github.com/josephbudd/crud/rendererprocess/api/event"
 
 )
 

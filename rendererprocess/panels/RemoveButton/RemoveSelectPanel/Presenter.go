@@ -24,7 +24,7 @@ type panelPresenter struct {
 
 	// example:
 
-	import "github.com/josephbudd/crud/rendererprocess/markup"
+	import "github.com/josephbudd/crud/rendererprocess/api/markup"
 
 	editCustomerName *markup.Element
 

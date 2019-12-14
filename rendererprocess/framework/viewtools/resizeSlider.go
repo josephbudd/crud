@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"syscall/js"
 
-	"github.com/josephbudd/crud/rendererprocess/window"
+	"github.com/josephbudd/crud/rendererprocess/api/window"
 )
 
 func sizeSliderPanel(sliderPanel js.Value, w, h float64) {

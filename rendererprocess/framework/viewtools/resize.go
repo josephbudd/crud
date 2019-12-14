@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/josephbudd/crud/rendererprocess/framework/callback"
-	"github.com/josephbudd/crud/rendererprocess/event"
-	"github.com/josephbudd/crud/rendererprocess/window"
+	"github.com/josephbudd/crud/rendererprocess/api/event"
+	"github.com/josephbudd/crud/rendererprocess/api/window"
 )
 
 func initializeResize() {

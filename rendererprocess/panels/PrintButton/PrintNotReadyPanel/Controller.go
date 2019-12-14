@@ -25,7 +25,7 @@ type panelController struct {
 	// example:
 
 	import "syscall/js"
-	import "github.com/josephbudd/crud/rendererprocess/markup"
+	import "github.com/josephbudd/crud/rendererprocess/api/markup"
 
 	addCustomerName   *markup.Element
 	addCustomerSubmit *markup.Element
@@ -76,8 +76,8 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 // example:
 
 import "github.com/josephbudd/crud/domain/store/record"
-import "github.com/josephbudd/crud/rendererprocess/event"
-import "github.com/josephbudd/crud/rendererprocess/display"
+import "github.com/josephbudd/crud/rendererprocess/api/event"
+import "github.com/josephbudd/crud/rendererprocess/api/display"
 
 func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
 	// See renderer/event/event.go.

@@ -4,7 +4,7 @@ package markup
 
 import (
 	"github.com/josephbudd/crud/rendererprocess/framework/callback"
-	"github.com/josephbudd/crud/rendererprocess/event"
+	"github.com/josephbudd/crud/rendererprocess/api/event"
 )
 
 // SetEventHandler sets the event handler for an element.

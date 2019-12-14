@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/josephbudd/crud/rendererprocess/framework/lpc"
-	"github.com/josephbudd/crud/rendererprocess/dom"
+	"github.com/josephbudd/crud/rendererprocess/api/dom"
 	"github.com/josephbudd/crud/rendererprocess/paneling"
 )
 

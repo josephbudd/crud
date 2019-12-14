@@ -1,9 +1,9 @@
 package kickwasmwidgets
 
 import (
-	"github.com/josephbudd/crud/rendererprocess/dom"
-	"github.com/josephbudd/crud/rendererprocess/event"
-	"github.com/josephbudd/crud/rendererprocess/markup"
+	"github.com/josephbudd/crud/rendererprocess/api/dom"
+	"github.com/josephbudd/crud/rendererprocess/api/event"
+	"github.com/josephbudd/crud/rendererprocess/api/markup"
 )
 
 // VList is vertical list of verbose buttons.

@@ -24,23 +24,15 @@ $ ./crud
 
 ## If you want to build CRUD on linux, windows, darwin
 
-### Download kickwasm and it's tools
+### Download kickwasm and it's tools and dependencies
 
 ``` shell
-$ go get -u github.com/josephbudd/kickawasm
-$ cd ~/go/src/github.com/josephbudd/kickwasm
-$ make install
-$ make test
-```
-
-### Get CRUD's dependencies
-
-``` shell
-
-$ go get github.com/boltdb/bolt/...
-$ go get gopkg.in/yaml.v2
-$ go get github.com/gorilla/websocket
-
+~$ go get -u github.com/josephbudd/kickwasm
+~$ cd ~/go/src/github.com/josephbudd/kickwasm
+~/go/src/github.com/josephbudd/kickwasm$ make install
+~/go/src/github.com/josephbudd/kickwasm$ make test
+~/go/src/github.com/josephbudd/kickwasm$ make dependencies
+~/go/src/github.com/josephbudd/kickwasm$ make proofs
 ```
 
 ### Build and run the CRUD

@@ -8,8 +8,6 @@ import (
 	"log"
 	"syscall/js"
 
-	"github.com/pkg/errors"
-
 	"github.com/josephbudd/crud/domain/lpc/message"
 	"github.com/josephbudd/crud/rendererprocess/framework/callback"
 	"github.com/josephbudd/crud/rendererprocess/framework/viewtools"
@@ -114,7 +112,7 @@ func (client *Client) Connect(callBack func()) (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "client.Connect")
+			err = fmt.Errorf("client.Connect: %w", err)
 		}
 	}()
 
@@ -126,12 +124,12 @@ func (client *Client) Connect(callBack func()) (err error) {
 	ws := global.Get("WebSocket")
 	client.connection = ws.New(client.location)
 	if client.connection == js.Undefined() {
-		err = errors.New("connection is undefined")
+		err = fmt.Errorf("connection is undefined")
 		return
 	}
 	rs := client.connection.Get("readyState")
 	if rs.String() == "undefined" {
-		err = errors.New("readystate is undefined")
+		err = fmt.Errorf("readystate is undefined")
 		return
 	}
 	client.connection.Set("onopen", callback.RegisterCallBack(client.onOpen))
@@ -165,6 +163,56 @@ func (client *Client) dispatch() {
 				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
 				return
 			}
+		case *message.AddContactMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.EditContactMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.GetEditContactMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.GetEditSelectContactsPageMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.GetPrintContactMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.GetPrintSelectContactsPageMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.GetRemoveContactMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.GetRemoveSelectContactsPageMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.ReloadContactsMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
+		case *message.RemoveContactMainProcessToRenderer:
+			if msg.Fatal {
+				viewtools.GoModal(msg.ErrorMessage, "Fatal Error", client.onFatal)
+				return
+			}
 		}
 		// No fatals so go on.
 		panelsCount := viewtools.CountMarkupPanels()
@@ -178,7 +226,7 @@ func (client *Client) dispatch() {
 // Handlers.
 
 func (client *Client) onFatal() {
-	client.QuitCh <- struct{}{}
+    client.QuitCh <- struct{}{}
 }
 
 func (client *Client) onBreak(this js.Value, args []js.Value) (nilReturn interface{}) {

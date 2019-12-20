@@ -29,7 +29,11 @@ func handleGetRemoveSelectContactsPage(ctx context.Context, rxmessage *message.G
 	var rr []*record.Contact
 	var err error
 	if rr, err = stores.Contact.GetAll(); err != nil {
-		txmessage.Error = true
+		// Send the err to package main.
+		errChan <- err
+		// Send the error to the renderer.
+		// A bolt database error is fatal.
+		txmessage.Fatal = true
 		txmessage.ErrorMessage = err.Error()
 		sending <- txmessage
 		return

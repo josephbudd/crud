@@ -31,7 +31,11 @@ func handleGetRemoveContact(ctx context.Context, rxmessage *message.GetRemoveCon
 	var r *record.Contact
 	var err error
 	if r, err = stores.Contact.Get(rxmessage.ID); err != nil {
-		txmessage.Error = true
+		// Send the err to package main.
+		errChan <- err
+		// Send the error to the renderer.
+		// A bolt database error is fatal.
+		txmessage.Fatal = true
 		txmessage.ErrorMessage = err.Error()
 		sending <- txmessage
 		return

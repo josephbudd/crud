@@ -3,7 +3,6 @@ package dispatch
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/josephbudd/crud/domain/lpc/message"
 	"github.com/josephbudd/crud/domain/store"
@@ -30,11 +29,12 @@ func handleEditContact(ctx context.Context, rxmessage *message.EditContactRender
 		Record: rxmessage.Record,
 	}
 	if err := stores.Contact.Update(rxmessage.Record); err != nil {
-		errmsg := fmt.Sprintf("handleEditContact: stores.Contact.Update(rxmessage.Record): error is %s\n", err.Error())
-		log.Println(errmsg)
-		// Send back the error.
-		txmessage.Error = true
-		txmessage.ErrorMessage = errmsg
+		// Send the err to package main.
+		errChan <- err
+		// Send the error to the renderer.
+		// A bolt database error is fatal.
+		txmessage.Fatal = true
+		txmessage.ErrorMessage = fmt.Sprintf("handleEditContact: stores.Contact.Update(rxmessage.Record): error is %s\n", err.Error())
 		sending <- txmessage
 		return
 	}

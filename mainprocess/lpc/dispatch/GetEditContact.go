@@ -2,6 +2,7 @@ package dispatch
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/josephbudd/crud/domain/lpc/message"
 	"github.com/josephbudd/crud/domain/store"
@@ -31,6 +32,21 @@ func handleGetEditContact(ctx context.Context, rxmessage *message.GetEditContact
 	var r *record.Contact
 	var err error
 	if r, err = stores.Contact.Get(rxmessage.ID); err != nil {
+		// Send the err to package main.
+		errChan <- err
+		// Send the error to the renderer.
+		// A bolt database error is fatal.
+		txmessage.Fatal = true
+		txmessage.ErrorMessage = err.Error()
+		sending <- txmessage
+		return
+	}
+	if r == nil {
+		// Send the err to package main.
+		err = fmt.Errorf("unable to fine contact for %d", txmessage.ID)
+		errChan <- err
+		// Send the error to the renderer.
+		// A bolt database error is fatal.
 		txmessage.Error = true
 		txmessage.ErrorMessage = err.Error()
 		sending <- txmessage

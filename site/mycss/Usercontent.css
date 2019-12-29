@@ -44,13 +44,11 @@
     visibility: hidden;
   }
 
-
-  /* You may or may not want to use these.
-  h1,
+  /* h1, */
   h2
   {
     display: none !important;
-  } */
+  }
 }
 
 /******************************************************************************

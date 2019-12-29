@@ -3,11 +3,12 @@
 package addpanel
 
 import (
+	"fmt"
+
 	"github.com/josephbudd/crud/domain/store/record"
 	"github.com/josephbudd/crud/rendererprocess/api/display"
 	"github.com/josephbudd/crud/rendererprocess/api/event"
 	"github.com/josephbudd/crud/rendererprocess/api/markup"
-	"github.com/pkg/errors"
 )
 
 /*
@@ -28,7 +29,6 @@ type panelController struct {
 
 	// example:
 
-	import "syscall/js"
 	import "github.com/josephbudd/crud/rendererprocess/api/markup"
 
 	addCustomerName   *markup.Element
@@ -55,7 +55,7 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(controller *panelController) defineControlsHandlers()")
+			err = fmt.Errorf("(controller *panelController) defineControlsHandlers(): %w", err)
 		}
 	}()
 
@@ -68,13 +68,13 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 
 	// Define the customer name text input GUI controller.
 	if controller.addCustomerName = document.ElementByID("addCustomerName"); controller.addCustomerName == nil {
-		err = errors.New("unable to find #addCustomerName")
+		err = fmt.Errorf("unable to find #addCustomerName")
 		return
 	}
 
 	// Define the submit button GUI controller.
 	if controller.addCustomerSubmit = document.ElementByID("addCustomerSubmit"); controller.addCustomerSubmit == nil {
-		err = errors.New("unable to find #addCustomerSubmit")
+		err = fmt.Errorf("unable to find #addCustomerSubmit")
 		return
 	}
 	// Handle the submit button's onclick event.
@@ -83,51 +83,51 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 	*/
 
 	if controller.contactAddName = document.ElementByID("contactAddName"); controller.contactAddName == nil {
-		err = errors.New("unable to find #contactAddName")
+		err = fmt.Errorf("unable to find #contactAddName")
 		return
 	}
 	if controller.contactAddAddress1 = document.ElementByID("contactAddAddress1"); controller.contactAddAddress1 == nil {
-		err = errors.New("unable to find #contactAddAddress1")
+		err = fmt.Errorf("unable to find #contactAddAddress1")
 		return
 	}
 	if controller.contactAddAddress2 = document.ElementByID("contactAddAddress2"); controller.contactAddAddress2 == nil {
-		err = errors.New("unable to find #contactAddAddress2")
+		err = fmt.Errorf("unable to find #contactAddAddress2")
 		return
 	}
 	if controller.contactAddCity = document.ElementByID("contactAddCity"); controller.contactAddCity == nil {
-		err = errors.New("unable to find #contactAddCity")
+		err = fmt.Errorf("unable to find #contactAddCity")
 		return
 	}
 	if controller.contactAddState = document.ElementByID("contactAddState"); controller.contactAddState == nil {
-		err = errors.New("unable to find #contactAddState")
+		err = fmt.Errorf("unable to find #contactAddState")
 		return
 	}
 	if controller.contactAddZip = document.ElementByID("contactAddZip"); controller.contactAddZip == nil {
-		err = errors.New("unable to find #contactAddZip")
+		err = fmt.Errorf("unable to find #contactAddZip")
 		return
 	}
 	if controller.contactAddPhone = document.ElementByID("contactAddPhone"); controller.contactAddPhone == nil {
-		err = errors.New("unable to find #contactAddPhone")
+		err = fmt.Errorf("unable to find #contactAddPhone")
 		return
 	}
 	if controller.contactAddEmail = document.ElementByID("contactAddEmail"); controller.contactAddEmail == nil {
-		err = errors.New("unable to find #contactAddEmail")
+		err = fmt.Errorf("unable to find #contactAddEmail")
 		return
 	}
 	if controller.contactAddSocial = document.ElementByID("contactAddSocial"); controller.contactAddSocial == nil {
-		err = errors.New("unable to find #contactAddSocial")
+		err = fmt.Errorf("unable to find #contactAddSocial")
 		return
 	}
 
 	if controller.contactAddSubmit = document.ElementByID("contactAddSubmit"); controller.contactAddSubmit == nil {
-		err = errors.New("unable to find #contactAddSubmit")
+		err = fmt.Errorf("unable to find #contactAddSubmit")
 		return
 	}
 	// Handle the add button's onclick event.
 	controller.contactAddSubmit.SetEventHandler(controller.handleSubmit, "click", false)
 
 	if controller.contactAddCancel = document.ElementByID("contactAddCancel"); controller.contactAddCancel == nil {
-		err = errors.New("unable to find #contactAddCancel")
+		err = fmt.Errorf("unable to find #contactAddCancel")
 		return
 	}
 	// Handle the cancel button's onclick event.
@@ -147,7 +147,7 @@ import "github.com/josephbudd/crud/rendererprocess/api/event"
 import "github.com/josephbudd/crud/rendererprocess/api/display"
 
 func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
-	// See renderer/event/event.go.
+	// See rendererprocess/api/event/event.go.
 	// The event.Event funcs.
 	//   e.PreventDefaultBehavior()
 	//   e.StopCurrentPhasePropagation()

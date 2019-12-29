@@ -3,7 +3,8 @@
 package removeformpanel
 
 import (
-	"github.com/pkg/errors"
+	"context"
+	"fmt"
 
 	"github.com/josephbudd/crud/rendererprocess/framework/lpc"
 	"github.com/josephbudd/crud/rendererprocess/api/dom"
@@ -25,16 +26,16 @@ type Panel struct {
 }
 
 // NewPanel constructs a new panel.
-func NewPanel(quitChan, eojChan chan struct{}, receiveChan lpc.Receiving, sendChan lpc.Sending, help *paneling.Help) (panel *Panel, err error) {
+func NewPanel(ctx context.Context, ctxCancel context.CancelFunc, receiveChan lpc.Receiving, sendChan lpc.Sending, help *paneling.Help) (panel *Panel, err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "RemoveFormPanel")
+			err = fmt.Errorf("RemoveFormPanel: %w", err)
 		}
 	}()
 
-	quitCh = quitChan
-	eojCh = eojChan
+	rendererProcessCtx = ctx
+	rendererProcessCtxCancel = ctxCancel
 	receiveCh = receiveChan
 	sendCh = sendChan
 	document = dom.NewDOM(0)

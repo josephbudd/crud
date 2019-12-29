@@ -3,9 +3,10 @@
 package editformpanel
 
 import (
+	"fmt"
+
 	"github.com/josephbudd/crud/domain/store/record"
 	"github.com/josephbudd/crud/rendererprocess/api/markup"
-	"github.com/pkg/errors"
 )
 
 /*
@@ -49,7 +50,7 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(presenter *panelPresenter) defineMembers()")
+			err = fmt.Errorf("(presenter *panelPresenter) defineMembers(): %w", err)
 		}
 	}()
 
@@ -61,46 +62,46 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	// Define the edit form's customer name input field.
 	if presenter.editCustomerName = document.ElementByID("editCustomerName"); presenter.editCustomerName == nil {
-		err = errors.New("unable to find #editCustomerName")
+		err = fmt.Errorf("unable to find #editCustomerName")
 		return
 	}
 
 	*/
 
 	if presenter.contactEditName = document.ElementByID("contactEditName"); presenter.contactEditName == nil {
-		err = errors.New("unable to find #contactEditName")
+		err = fmt.Errorf("unable to find #contactEditName")
 		return
 	}
 	if presenter.contactEditAddress1 = document.ElementByID("contactEditAddress1"); presenter.contactEditAddress1 == nil {
-		err = errors.New("unable to find #contactEditAddress1")
+		err = fmt.Errorf("unable to find #contactEditAddress1")
 		return
 	}
 	if presenter.contactEditAddress2 = document.ElementByID("contactEditAddress2"); presenter.contactEditAddress2 == nil {
-		err = errors.New("unable to find #contactEditAddress2")
+		err = fmt.Errorf("unable to find #contactEditAddress2")
 		return
 	}
 	if presenter.contactEditCity = document.ElementByID("contactEditCity"); presenter.contactEditCity == nil {
-		err = errors.New("unable to find #contactEditCity")
+		err = fmt.Errorf("unable to find #contactEditCity")
 		return
 	}
 	if presenter.contactEditState = document.ElementByID("contactEditState"); presenter.contactEditState == nil {
-		err = errors.New("unable to find #contactEditState")
+		err = fmt.Errorf("unable to find #contactEditState")
 		return
 	}
 	if presenter.contactEditZip = document.ElementByID("contactEditZip"); presenter.contactEditZip == nil {
-		err = errors.New("unable to find #contactEditZip")
+		err = fmt.Errorf("unable to find #contactEditZip")
 		return
 	}
 	if presenter.contactEditPhone = document.ElementByID("contactEditPhone"); presenter.contactEditPhone == nil {
-		err = errors.New("unable to find #contactEditPhone")
+		err = fmt.Errorf("unable to find #contactEditPhone")
 		return
 	}
 	if presenter.contactEditEmail = document.ElementByID("contactEditEmail"); presenter.contactEditEmail == nil {
-		err = errors.New("unable to find #contactEditEmail")
+		err = fmt.Errorf("unable to find #contactEditEmail")
 		return
 	}
 	if presenter.contactEditSocial = document.ElementByID("contactEditSocial"); presenter.contactEditSocial == nil {
-		err = errors.New("unable to find #contactEditSocial")
+		err = fmt.Errorf("unable to find #contactEditSocial")
 		return
 	}
 

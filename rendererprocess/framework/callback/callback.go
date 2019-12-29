@@ -3,10 +3,9 @@
 package callback
 
 import (
+	"fmt"
 	"math"
 	"syscall/js"
-
-	"github.com/pkg/errors"
 
 	"github.com/josephbudd/crud/rendererprocess/api/event"
 )
@@ -91,7 +90,7 @@ func UnRegisterCallBacks(panelUniqueID uint64) (err error) {
 	var funcs []js.Func
 	var found bool
 	if funcs, found = jsCallBacks[panelUniqueID]; !found {
-		err = errors.New("panelUniqueID not found in jsCallBacks")
+		err = fmt.Errorf("panelUniqueID not found in jsCallBacks")
 		return
 	}
 	for _, f := range funcs {

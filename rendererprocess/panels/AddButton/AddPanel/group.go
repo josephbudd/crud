@@ -3,9 +3,8 @@
 package addpanel
 
 import (
+	"fmt"
 	"syscall/js"
-
-	"github.com/pkg/errors"
 
 	"github.com/josephbudd/crud/rendererprocess/api/markup"
 	"github.com/josephbudd/crud/rendererprocess/framework/viewtools"
@@ -29,13 +28,13 @@ func (group *panelGroup) defineMembers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(group *panelGroup) defineMembers()")
+			err = fmt.Errorf("(group *panelGroup) defineMembers(): %w", err)
 		}
 	}()
 
     var panel *markup.Element
  if panel = document.ElementByID("mainMasterView-home-pad-AddButton-AddPanel"); panel == nil {
-		err = errors.New("unable to find #mainMasterView-home-pad-AddButton-AddPanel")
+	err = fmt.Errorf("unable to find #mainMasterView-home-pad-AddButton-AddPanel")
 		return
     }
     group.addPanel = panel.JSValue()

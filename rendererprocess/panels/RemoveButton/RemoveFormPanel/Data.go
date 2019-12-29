@@ -3,6 +3,8 @@
 package removeformpanel
 
 import (
+	"context"
+
 	"github.com/josephbudd/crud/rendererprocess/api/dom"
 	"github.com/josephbudd/crud/rendererprocess/framework/lpc"
 )
@@ -13,12 +15,20 @@ import (
 
 */
 
-var (
-	// quitCh will close the application
-	quitCh chan struct{}
+const (
+	emptyText = ""
+)
 
-	// eojCh will signal go routines to stop and return because the application is ending.
-	eojCh chan struct{}
+var (
+	// rendererProcessCtx is the renderer process's context.
+	rendererProcessCtx context.Context
+
+	// rendererProcessCtxCancel is the renderer process's context cancel func.
+	// Calling it will stop the entire renderer process.
+	// To gracefully stop the entire renderer process use either of the api funcs
+	//   application.GracefullyClose(cancelFunc context.CancelFunc)
+	//   or application.NewGracefullyCloseHandler(cancelFunc context.CancelFunc) (handler func(e event.Event) (nilReturn interface{})).
+	rendererProcessCtxCancel context.CancelFunc
 
 	// receiveCh receives messages from the main process.
 	receiveCh lpc.Receiving
@@ -28,6 +38,4 @@ var (
 
 	// The document object module.
 	document *dom.DOM
-
-	emptyText = ""
 )

@@ -3,9 +3,10 @@
 package framework
 
 import (
+	"context"
+	"fmt"
 	"log"
 
-	"github.com/pkg/errors"
 
 	"github.com/josephbudd/crud/rendererprocess/framework/lpc"
 	"github.com/josephbudd/crud/rendererprocess/framework/viewtools"
@@ -30,13 +31,12 @@ import (
 
 */
 
-// DoPanels builds and runs the panels.
-func DoPanels(quitChan, eojChan chan struct{}, receiveChan lpc.Receiving, sendChan lpc.Sending,
-	help *paneling.Help) (err error) {
+// DoMarkupPanels builds and runs the markup panels.
+func DoMarkupPanels(ctx context.Context, ctxCancel context.CancelFunc, receiveChan lpc.Receiving, sendChan lpc.Sending, help *paneling.Help) (err error) {
 	
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "DoPanels")
+			err = fmt.Errorf("DoMarkupPanels: %w", err)
 			log.Println("Error: " + err.Error())
 		}
 	}()
@@ -45,43 +45,43 @@ func DoPanels(quitChan, eojChan chan struct{}, receiveChan lpc.Receiving, sendCh
 
 	// 2. Construct the panel code.
 	var addPanel *addpanel.Panel
-	if addPanel, err = addpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if addPanel, err = addpanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var editFormPanel *editformpanel.Panel
-	if editFormPanel, err = editformpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if editFormPanel, err = editformpanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var editNotReadyPanel *editnotreadypanel.Panel
-	if editNotReadyPanel, err = editnotreadypanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if editNotReadyPanel, err = editnotreadypanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var editSelectPanel *editselectpanel.Panel
-	if editSelectPanel, err = editselectpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if editSelectPanel, err = editselectpanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var printNotReadyPanel *printnotreadypanel.Panel
-	if printNotReadyPanel, err = printnotreadypanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if printNotReadyPanel, err = printnotreadypanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var printPrintPanel *printprintpanel.Panel
-	if printPrintPanel, err = printprintpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if printPrintPanel, err = printprintpanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var printSelectPanel *printselectpanel.Panel
-	if printSelectPanel, err = printselectpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if printSelectPanel, err = printselectpanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var removeFormPanel *removeformpanel.Panel
-	if removeFormPanel, err = removeformpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if removeFormPanel, err = removeformpanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var removeNotReadyPanel *removenotreadypanel.Panel
-	if removeNotReadyPanel, err = removenotreadypanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if removeNotReadyPanel, err = removenotreadypanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 	var removeSelectPanel *removeselectpanel.Panel
-	if removeSelectPanel, err = removeselectpanel.NewPanel(quitChan, eojChan, receiveChan, sendChan, help); err != nil {
+	if removeSelectPanel, err = removeselectpanel.NewPanel(ctx, ctxCancel, receiveChan, sendChan, help); err != nil {
 		return
 	}
 

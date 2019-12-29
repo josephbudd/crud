@@ -3,8 +3,9 @@
 package addpanel
 
 import (
+	"fmt"
+
 	"github.com/josephbudd/crud/rendererprocess/api/markup"
-	"github.com/pkg/errors"
 )
 
 /*
@@ -48,7 +49,7 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(presenter *panelPresenter) defineMembers()")
+			err = fmt.Errorf("(presenter *panelPresenter) defineMembers(): %w", err)
 		}
 	}()
 
@@ -60,46 +61,46 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	// Define the edit form's customer name input field.
 	if presenter.editCustomerName = document.ElementByID("editCustomerName"); presenter.editCustomerName == nil {
-		err = errors.New("unable to find #editCustomerName")
+		err = fmt.Errorf("unable to find #editCustomerName")
 		return
 	}
 
 	*/
 
 	if presenter.contactAddName = document.ElementByID("contactAddName"); presenter.contactAddName == nil {
-		err = errors.New("unable to find #contactAddName")
+		err = fmt.Errorf("unable to find #contactAddName")
 		return
 	}
 	if presenter.contactAddAddress1 = document.ElementByID("contactAddAddress1"); presenter.contactAddAddress1 == nil {
-		err = errors.New("unable to find #contactAddAddress1")
+		err = fmt.Errorf("unable to find #contactAddAddress1")
 		return
 	}
 	if presenter.contactAddAddress2 = document.ElementByID("contactAddAddress2"); presenter.contactAddAddress2 == nil {
-		err = errors.New("unable to find #contactAddAddress2")
+		err = fmt.Errorf("unable to find #contactAddAddress2")
 		return
 	}
 	if presenter.contactAddCity = document.ElementByID("contactAddCity"); presenter.contactAddCity == nil {
-		err = errors.New("unable to find #contactAddCity")
+		err = fmt.Errorf("unable to find #contactAddCity")
 		return
 	}
 	if presenter.contactAddState = document.ElementByID("contactAddState"); presenter.contactAddState == nil {
-		err = errors.New("unable to find #contactAddState")
+		err = fmt.Errorf("unable to find #contactAddState")
 		return
 	}
 	if presenter.contactAddZip = document.ElementByID("contactAddZip"); presenter.contactAddZip == nil {
-		err = errors.New("unable to find #contactAddZip")
+		err = fmt.Errorf("unable to find #contactAddZip")
 		return
 	}
 	if presenter.contactAddPhone = document.ElementByID("contactAddPhone"); presenter.contactAddPhone == nil {
-		err = errors.New("unable to find #contactAddPhone")
+		err = fmt.Errorf("unable to find #contactAddPhone")
 		return
 	}
 	if presenter.contactAddEmail = document.ElementByID("contactAddEmail"); presenter.contactAddEmail == nil {
-		err = errors.New("unable to find #contactAddEmail")
+		err = fmt.Errorf("unable to find #contactAddEmail")
 		return
 	}
 	if presenter.contactAddSocial = document.ElementByID("contactAddSocial"); presenter.contactAddSocial == nil {
-		err = errors.New("unable to find #contactAddSocial")
+		err = fmt.Errorf("unable to find #contactAddSocial")
 		return
 	}
 

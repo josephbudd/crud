@@ -7,7 +7,6 @@ import (
 
 	"github.com/josephbudd/crud/domain/store/record"
 	"github.com/josephbudd/crud/rendererprocess/api/markup"
-	"github.com/pkg/errors"
 )
 
 /*
@@ -45,7 +44,7 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(presenter *panelPresenter) defineMembers()")
+			err = fmt.Errorf("(presenter *panelPresenter) defineMembers(): %w", err)
 		}
 	}()
 
@@ -57,22 +56,22 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	// Define the edit form's customer name input field.
 	if presenter.editCustomerName = document.ElementByID("editCustomerName"); presenter.editCustomerName == nil {
-		err = errors.New("unable to find #editCustomerName")
+		err = fmt.Errorf("unable to find #editCustomerName")
 		return
 	}
 
 	*/
 
 	if presenter.printTitle = document.ElementByID("printTitle"); presenter.printTitle == nil {
-		err = errors.New("unable to find #printTitle")
+		err = fmt.Errorf("unable to find #printTitle")
 		return
 	}
 	if presenter.printTable = document.ElementByID("printTable"); presenter.printTable == nil {
-		err = errors.New("unable to find #printTable")
+		err = fmt.Errorf("unable to find #printTable")
 		return
 	}
 	if presenter.printPrintAs = document.ElementByID("printPrintAs"); presenter.printPrintAs == nil {
-		err = errors.New("unable to find #printPrintAs")
+		err = fmt.Errorf("unable to find #printPrintAs")
 		return
 	}
 

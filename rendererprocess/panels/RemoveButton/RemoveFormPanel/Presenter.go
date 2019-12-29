@@ -3,9 +3,10 @@
 package removeformpanel
 
 import (
+	"fmt"
+
 	"github.com/josephbudd/crud/domain/store/record"
 	"github.com/josephbudd/crud/rendererprocess/api/markup"
-	"github.com/pkg/errors"
 )
 
 /*
@@ -49,7 +50,7 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(presenter *panelPresenter) defineMembers()")
+			err = fmt.Errorf("(presenter *panelPresenter) defineMembers(): %w", err)
 		}
 	}()
 
@@ -61,46 +62,46 @@ func (presenter *panelPresenter) defineMembers() (err error) {
 
 	// Define the edit form's customer name input field.
 	if presenter.editCustomerName = document.ElementByID("editCustomerName"); presenter.editCustomerName == nil {
-		err = errors.New("unable to find #editCustomerName")
+		err = fmt.Errorf("unable to find #editCustomerName")
 		return
 	}
 
 	*/
 
 	if presenter.contactRemoveName = document.ElementByID("contactRemoveName"); presenter.contactRemoveName == nil {
-		err = errors.New("unable to find #contactRemoveName")
+		err = fmt.Errorf("unable to find #contactRemoveName")
 		return
 	}
 	if presenter.contactRemoveAddress1 = document.ElementByID("contactRemoveAddress1"); presenter.contactRemoveAddress1 == nil {
-		err = errors.New("unable to find #contactRemoveAddress1")
+		err = fmt.Errorf("unable to find #contactRemoveAddress1")
 		return
 	}
 	if presenter.contactRemoveAddress2 = document.ElementByID("contactRemoveAddress2"); presenter.contactRemoveAddress2 == nil {
-		err = errors.New("unable to find #contactRemoveAddress2")
+		err = fmt.Errorf("unable to find #contactRemoveAddress2")
 		return
 	}
 	if presenter.contactRemoveCity = document.ElementByID("contactRemoveCity"); presenter.contactRemoveCity == nil {
-		err = errors.New("unable to find #contactRemoveCity")
+		err = fmt.Errorf("unable to find #contactRemoveCity")
 		return
 	}
 	if presenter.contactRemoveState = document.ElementByID("contactRemoveState"); presenter.contactRemoveState == nil {
-		err = errors.New("unable to find #contactRemoveState")
+		err = fmt.Errorf("unable to find #contactRemoveState")
 		return
 	}
 	if presenter.contactRemoveZip = document.ElementByID("contactRemoveZip"); presenter.contactRemoveZip == nil {
-		err = errors.New("unable to find #contactRemoveZip")
+		err = fmt.Errorf("unable to find #contactRemoveZip")
 		return
 	}
 	if presenter.contactRemovePhone = document.ElementByID("contactRemovePhone"); presenter.contactRemovePhone == nil {
-		err = errors.New("unable to find #contactRemovePhone")
+		err = fmt.Errorf("unable to find #contactRemovePhone")
 		return
 	}
 	if presenter.contactRemoveEmail = document.ElementByID("contactRemoveEmail"); presenter.contactRemoveEmail == nil {
-		err = errors.New("unable to find #contactRemoveEmail")
+		err = fmt.Errorf("unable to find #contactRemoveEmail")
 		return
 	}
 	if presenter.contactRemoveSocial = document.ElementByID("contactRemoveSocial"); presenter.contactRemoveSocial == nil {
-		err = errors.New("unable to find #contactRemoveSocial")
+		err = fmt.Errorf("unable to find #contactRemoveSocial")
 		return
 	}
 

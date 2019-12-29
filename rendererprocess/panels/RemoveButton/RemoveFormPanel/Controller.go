@@ -3,12 +3,12 @@
 package removeformpanel
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/josephbudd/crud/domain/store/record"
 	"github.com/josephbudd/crud/rendererprocess/api/event"
 	"github.com/josephbudd/crud/rendererprocess/api/markup"
-	"github.com/pkg/errors"
 )
 
 /*
@@ -29,7 +29,6 @@ type panelController struct {
 
 	// example:
 
-	import "syscall/js"
 	import "github.com/josephbudd/crud/rendererprocess/api/markup"
 
 	addCustomerName   *markup.Element
@@ -48,7 +47,7 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 
 	defer func() {
 		if err != nil {
-			err = errors.WithMessage(err, "(controller *panelController) defineControlsHandlers()")
+			err = fmt.Errorf("(controller *panelController) defineControlsHandlers(): %w", err)
 		}
 	}()
 
@@ -61,13 +60,13 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 
 	// Define the customer name text input GUI controller.
 	if controller.addCustomerName = document.ElementByID("addCustomerName"); controller.addCustomerName == nil {
-		err = errors.New("unable to find #addCustomerName")
+		err = fmt.Errorf("unable to find #addCustomerName")
 		return
 	}
 
 	// Define the submit button GUI controller.
 	if controller.addCustomerSubmit = document.ElementByID("addCustomerSubmit"); controller.addCustomerSubmit == nil {
-		err = errors.New("unable to find #addCustomerSubmit")
+		err = fmt.Errorf("unable to find #addCustomerSubmit")
 		return
 	}
 	// Handle the submit button's onclick event.
@@ -76,14 +75,14 @@ func (controller *panelController) defineControlsHandlers() (err error) {
 	*/
 
 	if controller.contactRemoveSubmit = document.ElementByID("contactRemoveSubmit"); controller.contactRemoveSubmit == nil {
-		err = errors.New("unable to find #contactRemoveSubmit")
+		err = fmt.Errorf("unable to find #contactRemoveSubmit")
 		return
 	}
 	// Handle the submit button's onclick event.
 	controller.contactRemoveSubmit.SetEventHandler(controller.handleSubmit, "click", false)
 
 	if controller.contactRemoveCancel = document.ElementByID("contactRemoveCancel"); controller.contactRemoveCancel == nil {
-		err = errors.New("unable to find #contactRemoveCancel")
+		err = fmt.Errorf("unable to find #contactRemoveCancel")
 		return
 	}
 	// Handle the cancel button's onclick event.
@@ -103,7 +102,7 @@ import "github.com/josephbudd/crud/rendererprocess/api/event"
 import "github.com/josephbudd/crud/rendererprocess/api/display"
 
 func (controller *panelController) handleSubmit(e event.Event) (nilReturn interface{}) {
-	// See renderer/event/event.go.
+	// See rendererprocess/api/event/event.go.
 	// The event.Event funcs.
 	//   e.PreventDefaultBehavior()
 	//   e.StopCurrentPhasePropagation()
